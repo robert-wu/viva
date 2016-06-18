@@ -299,15 +299,10 @@ dialog.on('ContactOrganization', [
 
 bot.add('/', [
     function (session) {
-        builder.Prompts.choice(session, "Which region would you like sales for?", salesData); 
+        builder.Prompts.choice(session, "Which color?", "red|green|blue");
     },
     function (session, results) {
-        if (results.response) {
-            var region = salesData[results.response.entity];
-            session.send("We sold %(units)d units for a total of %(total)s.", region); 
-        } else {
-            session.send("ok");
-        }
+        
     }
 ]);
 
