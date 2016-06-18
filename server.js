@@ -42,7 +42,7 @@ dialog.onBegin(function (session, args, next) {
     }
 });
 
-dialog.add('/firstRun',  [
+dialog.on('/firstRun',  [
     function (session) {
         session.send("Hello, I'm Viva.");
     },
