@@ -35,7 +35,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session, args, next) {
-        session.send("[Hi, I'm Viva.](http://ning.com)");
+        session.send("[Hi, I'm Viva.](http://ning.com)\n\nwtf");
         next();
     },
     function (session, results) {
