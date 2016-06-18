@@ -51,7 +51,7 @@ server.listen(process.env.port || 3978, function () {
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
 bot.add('/', dialog);
 
-//dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+dialog.onDefault(builder.dialogAction().beginDialog('Greeting'));
 
 
 dialog.on('Greeting',  [
