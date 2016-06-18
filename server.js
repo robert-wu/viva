@@ -127,7 +127,7 @@ dialog.on('GetInformation', [
         if(criminal){
             session.send(session, "Here is what I know about " + criminal.entity);
         }
-    	if(environmental){
+    	if(environmental)
     	{
             session.send(session, "Here is what I know about " + environmental.entity);
     	}
