@@ -90,8 +90,11 @@ dialog.on('Greeting',  [
             if (!error && response.statusCode == 200) {
             //console.log(body) // Show the HTML for the Google homepage.
                 var json = JSON.parse(body);
-                var phoneNumber = json.data.dispatch.all[0];
+                var dispatchNumber = json.data.dispatch.all[0];
                 console.log(phoneNumber);
+                if(dispatchNumber = "") {
+                    dispatchNumber = json.data.police.all[0];
+                }
 
                 client.sendMessage({
 
