@@ -291,5 +291,36 @@ dialog.on('ContactOrganization', [
     }
 ]);
 
+bot.add('/cards',[
+    function (session) {
+        var buttons = 
+        {
+        "type": "Message",
+        "attachments": [
+            {
+               "text": "Pick one:",
+                "actions": [
+                    {
+                        "title": "Willy's Cheeseburger",
+                        "message": "CB"
+                    },
+                    {
+                        "title": "Curley Fries",
+                        "message": "F"
+                    },
+                    {
+                        "title": "Chocolate Shake",
+                        "message": "S"
+                    }
+                ]
+            }
+        ]
+        }
+
+        session.sendMessage(buttons);
+    }
+
+    ]);
+
 
 
