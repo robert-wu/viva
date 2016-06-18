@@ -1,6 +1,15 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 
+var Firebase = require("firebase");
+var myFirebaseRef = new Firebase("https://vive.firebaseio.com/Users/");
+
+var curData = [];
+
+myFirebaseRef.on('value', function(snapshot) {
+    curData=snapshot.val();
+});
+
 // Get secrets from server environment
 var botConnectorOptions = { 
     appId: process.env.BOTFRAMEWORK_APPID, 
@@ -43,73 +52,6 @@ dialog.on('Greeting',  [
     //     session.send("I am here to help you.");
     // }
 ]);
-
-dialog.on('SetupUserProfile', [
-    function (session) {
-        session.send("Let’s set up your profile.");
-    },
-    function (session) {
-        session.send( " In the case of an emergency, we can communicate your personal information to emergency service operators.");
-    },
-    function (session) {
-        session.send( "What is your full name?");
-    },
-    function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "What is your sex?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "What is your phone number?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "What is the phone number of your primary emergency contact?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "What is your date of birth?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "Do you have any existing medical conditions?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "Are you allergic to any medication?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-    function (session) {
-        session.send( "Who is your health provider?");
-    },
-     function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response); 
-    },
-
-
-    ]);
 
 dialog.on('GetInformation', [
     function (session, args, next) {
@@ -186,14 +128,97 @@ dialog.on('GetInformation', [
     }
 ]);
 
-bot.add('/police',[
-    function (session) {
-        session.send('Police phone number is blah blah blah.');
-    }
 
-    ]); 
+
+dialog.on('SetupUserProfile', [
+    function (session) {
+        builder.Prompts.text(session, "Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
+    },
+    function (session, results) {
+        session.userData.name = results.response;
+        if(curData[results.response] !== undefined){
+            sender.send('You are already registered');
+        }
+        else{
+            builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex"); 
+        }
+    },
+    function (session, results) {
+        session.userData.sex = results.response;
+        builder.Prompts.number(session, "What is your phone number?"); 
+    },
+    function (session, results) {
+        session.userData.number = results.response;
+        builder.Prompts.text(session, "What is your date of birth"); 
+    },
+    function (session, results) {
+        session.userData.DoB = results.response;
+        builder.Prompts.text(session, "Do you have any existing medical conditions?");
+    },
+    function (session, results) {
+        session.userData.medicalConditions = results.response;
+        builder.Prompts.text(session, "Are you allergic to any medications?"); 
+    },
+    function (session, results) {
+        session.userData.medicationAllergies = results.response;
+        builder.Prompts.text(session, "What is your health provider"); 
+    },
+    function (session, results) {
+        session.userData.healthProvider = results.response;
+        session.send("Thanks for your responses. They have been recorded"); 
+        myFirebaseRef.child(session.userData.name).set(session.userData);
+    }
+]);
 
 dialog.on('ContactOrganization', [
+    function (session) {
+        builder.Prompts.text(session, "Hello... Give me a country?");
+    },
+    function (session, results) {
+        country= results.response;
+        //session.send(country);
+        URLBuilder = 'https://restcountries.eu/rest/v1/name/'+ country;
+        //3console.log(URLBuilder);
+        HTTPRequest(URLBuilder, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                //console.log(body);
+                obj= JSON.parse(body);
+                //console.log(obj[0].alpha2Code);
+                URLBuilder2 = 'http://emergencynumberapi.com/api/country/'+obj[0].alpha2Code;
+                //console.log(URLBuilder2);
+                HTTPRequest(URLBuilder2, function(error2, response2, body2) {
+                    if (!error2 && response2.statusCode == 200) {
+                        //console.log(body);
+                        obj2 = JSON.parse(body2);
+                        out = "";
+                        if(obj2.data.fire.all[0]!=""){
+                            out += ", Fire: " + obj2.data.fire.all[0];
+                        }
+                        if(obj2.data.ambulance.all[0]!=""){
+                            out += ", Ambulance: " + obj2.data.ambulance.all[0];
+                        }
+                        if(obj2.data.police.all[0]!=""){
+                            out += ", Police: " + obj2.data.police.all[0];
+                        }
+                        if(obj2.data.dispatch.all[0]!=""){
+                            out += ", Dispatch: " + obj2.data.dispatch.all[0];
+                        }
+                        session.send(out.substring(2,200));
+                        //console.log(obj2);
+                    }
+                    else if(error2){
+                        console.log(error2);
+                    }
+                });
+            }
+            else if(error){
+                console.log(error);
+            }
+        });
+        console.log(data.code);
+    },
+
+
     function (session, args) {
         var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
         var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
@@ -222,5 +247,6 @@ dialog.on('ContactOrganization', [
 
     }
 ]);
+
 
 
