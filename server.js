@@ -112,9 +112,9 @@ dialog.on('Greeting',  [
 ]);*/
 
 dialog.on('GetInformation', [
-     function (session) {
+     /*function (session) {
         session.send('Your important phone numbers are include ' + curData['numbers']);
-    },
+    },*/
     function (session, args, next) {
         //session.send("getting information for ya " );
        // session.send(JSON.stringify(session));
