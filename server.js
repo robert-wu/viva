@@ -10,6 +10,15 @@ myFirebaseRef.on('value', function(snapshot) {
     curData=snapshot.val();
 });
 
+
+
+
+var NodeGeocoder = require('node-geocoder');
+var request = require("request");
+
+
+
+
 var client = require('twilio')('AC59a2a7d898b46d6b39fa102380816d40', '7f53052dbd2df38c182d0e01331c6f7f');
 // Get secrets from server environment
 var botConnectorOptions = { 
@@ -58,29 +67,62 @@ dialog.on('Greeting',  [
     },
     function(session, results) {
         var city = results.response;
-        client.sendMessage({
 
-            to:'+16303019617', // Any number Twilio can deliver to
-            from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-            body: '"6303019617"' + city // body of the SMS message
+        var options = {
+            provider: 'google',
 
-        }, function(err, responseData) { //this function is executed when a response is received from Twilio
+            // Optional depending on the providers 
+            httpAdapter: 'https', // Default 
+            apiKey: 'AIzaSyAbhgQXE4PijQum7zG1jwcpFhGqkujSH1k', // for Mapquest, OpenCage, Google Premier 
+            formatter: null         // 'gpx', 'string', ... 
+            };
 
-            session.send("Your health and contact information has been sent to a local dispatcher. You will receive a phone call shortly from emergency services.");
-            if (!err) { // "err" is an error received during the request, if any
+            var geocoder = NodeGeocoder(options);
 
-                // "responseData" is a JavaScript object containing data received from Twilio.
-                // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
-                // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+            // Using callback 
+            geocoder.geocode(city, function(err, res) {
+            // console.log(res);
+            var countryCode = res[0].countryCode;
 
-                console.log(responseData.from); // outputs "+14506667788"
-                console.log(responseData.body); // outputs "word to your mother."
+            // console.log('http://emergencynumberapi.com/api/country/'+countryCode);
 
+            request('http://emergencynumberapi.com/api/country/'+countryCode, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+            //console.log(body) // Show the HTML for the Google homepage.
+                var json = JSON.parse(body);
+                var phoneNumber = json.data.dispatch.all[0];
+                console.log(phoneNumber);
+
+                client.sendMessage({
+
+                    to:'+16303019617', // Any number Twilio can deliver to
+                    from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
+                    body: '"" ' + city // body of the SMS message
+
+                }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+                    session.send("Your health and contact information has been sent to a local dispatcher at " + phoneNumber + ". You will receive a phone call shortly from emergency services.");
+                    if (!err) { // "err" is an error received during the request, if any
+
+                        // "responseData" is a JavaScript object containing data received from Twilio.
+                        // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+                        // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+                        console.log(responseData.from); // outputs "+14506667788"
+                        console.log(responseData.body); // outputs "word to your mother."
+
+                    }
+                    else {
+                        console.log(err);
+                    }
+                });
             }
-            else {
-                console.log(err);
-            }
+            })
+
         });
+
+
+        
     }
     //,
     // function (session, results) {
