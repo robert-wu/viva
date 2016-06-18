@@ -123,8 +123,8 @@ dialog.on('GetInformation', [
            // response: organization.entity;
             
             if(organization.entity === "police" ){
-                session.sendMessage( "Here is what I know about " + organization.entity);
-                session.sendMessage( "this is" + organization.entity);
+                session.sendMessage( "Here is what I know about " + JSON.stringify(organization.entity));
+              //  session.sendMessage( "this is" + organization.entity);
                 console.log("police printout");
                 session.beginDialog('/police');
             }
