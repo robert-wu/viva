@@ -34,7 +34,8 @@ dialog.onBegin(function (session, args, next) {
     if (!session.userData.firstRun) {
         // Send the user through the first run experience
         session.userData.firstRun = true;
-        session.beginDialog('/profile');
+        //session.beginDialog('/profile');
+        session.send('Hello %s!', session.userData.name);
     } else {
         next();
     }
