@@ -92,7 +92,7 @@ dialog.on('Greeting',  [
                 var json = JSON.parse(body);
                 var dispatchNumber = json.data.dispatch.all[0];
                 console.log(phoneNumber);
-                if(dispatchNumber = "") {
+                if(dispatchNumber == "") {
                     dispatchNumber = json.data.police.all[0];
                 }
 
