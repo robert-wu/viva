@@ -6,6 +6,8 @@ var myFirebaseRef = new Firebase("https://vive.firebaseio.com/Users/");
 
 var curData = [];
 
+var lastUsedName = "";
+
 myFirebaseRef.on('value', function(snapshot) {
     curData=snapshot.val();
 });
@@ -67,7 +69,7 @@ dialog.on('Greeting',  [
     },
     function(session, results) {
         var city = results.response;
-
+        curData[lastUsedName]['number'] // phone number
         var options = {
             provider: 'google',
 
@@ -99,7 +101,7 @@ dialog.on('Greeting',  [
 
                     to:'+16303019617', // Any number Twilio can deliver to
                     from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-                    body: '"" ' + city // body of the SMS message
+                    body: 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['Conditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number'] // body of the SMS message
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
@@ -347,7 +349,8 @@ dialog.on('SetupUserProfile', [
         
         myFirebaseRef.child(session.userData.name).set(session.userData);
         country = session.userData.country;
-        session.send(country);
+        lastUsedName = session.userData.name;
+        session.send("Your profile is set up. Stay safe!");
     }
 ]);
 
