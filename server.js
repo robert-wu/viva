@@ -35,8 +35,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        session.send("Hi, I'm Viva.");
-        session.send("apple");
+        session.send("Hi, I'm Viva.\n\n I'm here to help you.  hello");
         //next();
     }
     //,
