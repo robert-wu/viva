@@ -259,7 +259,7 @@ dialog.on('GetInformation', [
                 "in the event of a fire. You will have to determine the order in which you address these points, depending on your assessment of " +
                 "the situation.");
             }
-            session.endDialog();
+            session.reset();
             //session.send( "Here is what I know about " + environmental.entity);
             //next({ response: environmental.entity });
         }
