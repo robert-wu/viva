@@ -101,11 +101,11 @@ dialog.on('Greeting',  [
 
                     to:'+16303019617', // Any number Twilio can deliver to
                     from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-                    body: 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['Conditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number'] // body of the SMS message
+                    body: 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['medicalConditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number'] // body of the SMS message
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
-                    session.send("Your health and contact information has been sent to a local dispatcher at " + dispatchNumber + ". You will receive a phone call shortly from emergency services.");
+                    session.send("Your health and contact information has been sent to a local dispatcher at " + dispatchNumber + " at city " + city  + ". You will receive a phone call shortly from emergency services.");
                     if (!err) { // "err" is an error received during the request, if any
 
                         // "responseData" is a JavaScript object containing data received from Twilio.
@@ -135,9 +135,6 @@ dialog.on('Greeting',  [
 ]);
 
 dialog.on('GetInformation', [
-     /*function (session) {
-        session.send('Your important phone numbers are include ' + curData['numbers']);
-    },*/
     function (session, args, next) {
         //session.send("getting information for ya " );
        // session.send(JSON.stringify(session));
@@ -207,13 +204,7 @@ dialog.on('GetInformation', [
         else if(environmental)
         {
             if(environmental.entity === "tornado" ){
-                session.send("Continued vigilance and quick response to tornado watches and warnings are critical, since tornadoes can strike virtually" +
-                " anywhere at any time. Most tornadoes are abrupt at onset, short-lived and often obscured by rain or darkness. That's why it's so " +
-                "important to plan ahead. Every individual, family, and business should have a tornado emergency plan for their homes or places of work, " +
-                "and should learn how to protect themselves in cars, open country, and other situations that may arise. The most important step you can take " +
-                "to prepare for a tornado is to have a shelter plan in place. Where will you go when a tornado warning has been issued for your county or city? " +
-                "Is it a basement or a storm cellar? Is there an interior room on the ground floor that you can use as a storm shelter? Have a plan, " +
-                "and make sure everyone in your family or workplace knows it.");
+                session.beginDialog('/Tornado');
             }
             else if(environmental.entity === "hurricane" ){
                 session.send("To stay safe in a home during a hurricane, stay inside and away from windows, skylights and glass doors. Find a safe area in the " +
@@ -256,53 +247,103 @@ dialog.on('GetInformation', [
     
 ]);
 
+bot.add('/Tornado', [
+    function (session) {
+        builder.Prompts.choice(session, "What about tornados would you like to learn?", "Summary|How to Prepare|Tornado Watch vs. Warning|Danger Signs|During Tornado|After Tornado");
+    },
+    function (session, results) {
+        if(results.response.entity == "Summary"){
+            session.send("Continued vigilance and quick response to tornado watches and warnings are critical, since tornadoes can strike virtually" +
+                " anywhere at any time. Most tornadoes are abrupt at onset, short-lived and often obscured by rain or darkness. That's why it's so " +
+                "important to plan ahead. Every individual, family, and business should have a tornado emergency plan for their homes or places of work, " +
+                "and should learn how to protect themselves in cars, open country, and other situations that may arise.");
+        }
+        else if(results.response.entity == "How to Prepare"){
+            session.send(
+            "The most important step you can take " +
+                "to prepare for a tornado is to have a shelter plan in place. Where will you go when a tornado warning has been issued for your county or city? " +
+                "Is it a basement or a storm cellar? Is there an interior room on the ground floor that you can use as a storm shelter? Have a plan, " +
+                "and make sure everyone in your family or workplace knows it."
+            );
+        }
+        else if (results.response.entity == "Tornado Watch vs. Warning"){
+            session.send(
+            "Know the difference between a tornado watch and a warning: Tornado Watch alerts when conditions are right for tornadoes, and tornadoes are " +
+            "possible. Remain alert: watch the sky and tune in to NOAA Weather Radio, commercial radio, or a local television station in case a warning " +
+            "is issued. Tornado Warnings are when a tornado has been spotted by human eye or radar, and is moving toward you in the warning area. " +
+            "Take shelter immediately."
+            );
+        } else if (results.response.entity == "Danger Signs"){
+            session.send(
+            "Look for the following danger signs: Dark, greenish sky; Large hail; A large, dark, low-lying cloud (particularly if rotating); " +
+            "A loud roar, similar to a freight train; When a tornado warning has been issued for your county or city, seek shelter immediately!"
+            );
+        } else if (results.response.entity == "During Tornado"){
+            session.send(
+            "If you are in a structure or residence area, Head to your pre-designated shelter area. This could be a basement, storm cellar, or the " +
+            "lowest building level. If you are home and you don't have a basement, go to the most interior room of the ground floor. Often a " +
+            "bathroom or laundry room makes a suitable shelter area because the water pipes reenforce the walls, providing a more sturdy structure. " +
+            "Stay away from corners, windows, doors, and exterior walls. Put as many walls as possible between you and the outside. Get down on your " +
+            "knees and use your hands to protect your head and neck. Do not open windows. If you are outside with no nearby structure, lie flat in a nearby ditch or depression " +
+            "and cover your head and neck with your hands. Be aware of flying debris. Tornadoes can pick up large objects and turn them into missiles. Flying debris cause the most tornado deaths."
+            );
+        } else if (results.response.entity == "After Tornado"){
+            session.send(
+            "After a tornado passes, it is important to take some precautions. Be careful as your leave your tornado shelter, since there might " +
+            "be unseen damage waiting for you on the other side of doors. If your home has been damaged, walk carefully around the outside and check " +
+            "for things like loose power lines, gas leaks, and general structural damage. Leave the premises if you smell gas or if floodwaters " +
+            "exist around the building. Call your insurance agent and take pictures of the damage to your home or vehicle. If the destruction is " +
+            "extensive, don't panic. The American Red Crossand other volunteer agencies will arrive with food and water, and temporary housing will " +
+            "be designated by FEMA."
+            );
+        }  else {
+            session.endDialog();
+        }
+    } 
+]);
+
 bot.add('/HeartAttack', [
-        function (session) {
-            builder.Prompts.choice(session, "What about heart attacks would you like to learn about?", "Summary|Symptoms|Emergency|Prevention|Refresh");
-        },
-        function (session, results) {
-            if(results.response.entity == "Summary"){
-                session.send(
-                "A heart attack usually occurs when there is blockage in one of the heart's arteries." +
-            " This is an emergency that can cause death. It requires quick action. " + 
-            "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives."
-                );
-            }
-            else if(results.response.entity == "Symptoms"){
-                session.send(
-                "Common heart attack symptoms and warning signs may include: " +  
-                "Chest discomfort that feels like pressure, fullness, or a squeezing pain in the center of your " +
-                "chest; it lasts for more than a few minutes, or goes away and comes back. Pain and discomfort that " +
-                "extend beyond your chest to other parts of your upper body, such as one or both arms, back, neck, " +
-                "stomach,teeth, and jaw. Unexplained shortness of breath, with or without chest discomfort " +
-                "Other symptoms, such as cold sweats, nausea or vomiting, lightheadedness, anxiety, indigestion, and " +
-                "unexplained fatigue"
-                );
-            }
-            else if (results.response.entity == "Emergency"){
-                session.send(
-                "If you or someone you are with experiences chest discomfort or other heart attack symptoms, call 911 " +
-                "right away. Do not wait more than 5 minutes to make the call. While your first impulse may be to drive " +
-                "yourself or the heart attack victim to the hospital, it is better to call 911. Emergency medical services " +
-                "(EMS) personnel can begin treatment on the way to the hospital and are trained to revive a person if his " +
-                "heart stops. If you witness heart attack symptoms in someone and are unable to reach EMS, drive the " +
-                "person to the hospital. If you are experiencing heart attack symptoms, do not drive yourself to the " +
-                "hospital unless you have no other choice."
-                );
-            } else if (results.response.entity == "Prevention"){
-                session.send(
-                "There are many ways to prevent heart disease. These include quitting smoking, exercising more, and reducing stress. " +
-                "Maintaining a healthy and balanced diet is also key."
-                );
-            } else if (results.response.entity == "Refresh"){
-                session.send(
-                "Search for something else!"
-                );
-                session.endDialog();
-            }  else {
-                session.endDialog();
-            }
-        } 
+    function (session) {
+        builder.Prompts.choice(session, "What about heart attacks would you like to learn?", "Summary|Symptoms|Emergency|Prevention");
+    },
+    function (session, results) {
+        if(results.response.entity == "Summary"){
+            session.send(
+            "A heart attack usually occurs when there is blockage in one of the heart's arteries." +
+        " This is an emergency that can cause death. It requires quick action. " + 
+        "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives."
+            );
+        }
+        else if(results.response.entity == "Symptoms"){
+            session.send(
+            "Common heart attack symptoms and warning signs may include: " +  
+            "Chest discomfort that feels like pressure, fullness, or a squeezing pain in the center of your " +
+            "chest; it lasts for more than a few minutes, or goes away and comes back. Pain and discomfort that " +
+            "extend beyond your chest to other parts of your upper body, such as one or both arms, back, neck, " +
+            "stomach,teeth, and jaw. Unexplained shortness of breath, with or without chest discomfort " +
+            "Other symptoms, such as cold sweats, nausea or vomiting, lightheadedness, anxiety, indigestion, and " +
+            "unexplained fatigue"
+            );
+        }
+        else if (results.response.entity == "Emergency"){
+            session.send(
+            "If you or someone you are with experiences chest discomfort or other heart attack symptoms, call 911 " +
+            "right away. Do not wait more than 5 minutes to make the call. While your first impulse may be to drive " +
+            "yourself or the heart attack victim to the hospital, it is better to call 911. Emergency medical services " +
+            "(EMS) personnel can begin treatment on the way to the hospital and are trained to revive a person if his " +
+            "heart stops. If you witness heart attack symptoms in someone and are unable to reach EMS, drive the " +
+            "person to the hospital. If you are experiencing heart attack symptoms, do not drive yourself to the " +
+            "hospital unless you have no other choice."
+            );
+        } else if (results.response.entity == "Prevention"){
+            session.send(
+            "There are many ways to prevent heart disease. These include quitting smoking, exercising more, and reducing stress. " +
+            "Maintaining a healthy and balanced diet is also key."
+            );
+        }  else {
+            session.endDialog();
+        }
+    } 
 ]);
 
 
@@ -325,7 +366,7 @@ dialog.on('SetupUserProfile', [
         }
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -333,7 +374,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.number(session, "What is your phone number?"); 
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -341,7 +382,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "What is your country?"); 
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -349,7 +390,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "What is your date of birth"); 
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -357,7 +398,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "Do you have any existing medical conditions?");
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -365,7 +406,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "Are you allergic to any medications?"); 
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -373,7 +414,7 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "Last one! What is your health provider"); 
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
