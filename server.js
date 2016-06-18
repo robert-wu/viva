@@ -68,6 +68,7 @@ dialog.on('GetInformation', [
                 obj= JSON.parse(body);
                 //console.log(obj[0].alpha2Code);
                 URLBuilder2 = 'http://emergencynumberapi.com/api/country/'+obj[0].alpha2Code;
+                session.send(URLBuilder2);
                 //console.log(URLBuilder2);
                 HTTPRequest(URLBuilder2, function(error2, response2, body2) {
                     if (!error2 && response2.statusCode == 200) {
