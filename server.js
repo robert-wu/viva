@@ -114,7 +114,7 @@ dialog.on('SetupUserProfile', [
 dialog.on('GetInformation', [
     function (session, args, next) {
         //session.send("getting information for ya " );
-        session.send(JSON.stringify(session.message.location));
+        session.send(JSON.stringify(session));
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
     	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
