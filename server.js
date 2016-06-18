@@ -112,7 +112,7 @@ dialog.on('SetupUserProfile', [
     ]);
 
 dialog.on('GetInformation', [
-    function (session, args) {
+    function (session, args, next) {
         //session.send("getting information for ya " );
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
@@ -122,33 +122,62 @@ dialog.on('GetInformation', [
         if(organization){
            // response: organization.entity;
             session.send( "Here is what I know about " + organization.entity);
+            if(organization.entity === "police" ){
+                session.beginDialog('police');
+            }
+            if(organization.entity === "fire station" ){
+                session.beginDialog('fireStation');
+            }
+            if(organization.entity === "hospital" ){
+                session.beginDialog('hospital');
+            }
+            if(organization.entity === "embassy" ){
+                session.beginDialog('embassy');
+            }
         }
         else if(medical){
             session.send( "Here is what I know about " + medical.entity);
+            next({ response: medical.entity });
         }
         else if(criminal){
             session.send( "Here is what I know about " + criminal.entity);
+            next({ response: criminal.entity });
         }
     	else if(environmental)
     	{
             session.send( "Here is what I know about " + environmental.entity);
+            next({ response: environmental.entity });
+
     	}
         else{
             session.send("Here is what I know about nothing.");
+            next({ response: organization.entity });
         }
     },
     function (session, results) {
-        
+         if (results.response) {
+            if(results.response == "police")
+            {
 
+            }
+            session.send("Ok... Added the '%s' task.", results.response);
+        }
     }
 ]);
+
+dialog.on('police',[
+    function (session) {
+        session.send('Police phone number is blah blah blah.');
+    }
+
+    ]); 
 
 dialog.on('ContactOrganization', [
     function (session, args) {
         var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
-        var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
-        var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
-        var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Environmental');
+        var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
+        var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
+        var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Environmental');
 
         if(organization){
            // response: organization.entity;
