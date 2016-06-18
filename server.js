@@ -141,7 +141,7 @@ dialog.on('GetInformation', [
         else if(medical){
             if(medical.entity === "heart attack" ){
                 console.log("heart attack");
-                session.beginDialog('HeartAttack');
+                session.beginDialog('/HeartAttack');
             }
             else if(medical.entity === "broken bone" ){
                 session.send("It is hard to tell a dislocated joint from a broken bone. However, both are emergency situations, " + 
@@ -233,7 +233,7 @@ dialog.on('GetInformation', [
     
 ]);
 
-dialog.on('HeartAttack', [
+bot.add('/HeartAttack', [
         function (session) {
             builder.Prompts.choice(session, "What about heart attacks would you like to learn about?", "Summary|Symptoms|Emergency|Prevention|Refresh");
         },
