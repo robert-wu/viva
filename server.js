@@ -113,10 +113,10 @@ dialog.on('/SetupUserProfile', [
 dialog.on('GetInformation', [
     function (session, args) {
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
-		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
-    	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
-    	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Environmental');
-    	
+		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
+    	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
+    	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Environmental');
+
         if(organization){
            // response: organization.entity;
             session.send(session, "Here is what I know about " + organization.entity);
@@ -143,36 +143,27 @@ dialog.on('GetInformation', [
 
 dialog.on('ContactOrganization', [
     function (session, args) {
-    	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
-		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
-    	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
-    	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Environmental');
-    	if(!organization){
-            builder.Prompts.text(session, "What organization would you like to contact?");
-        }
-        else{
+    	 function (session, args) {
+        var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
+        var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
+        var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
+        var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Environmental');
+
+        if(organization){
            // response: organization.entity;
             session.send(session, "Contacting " + organization.entity);
         }
-        if(!medical){
-            builder.Prompts.text(session, "What medical services would you like to contact?");
+        if(medical){
+            session.send(session, "Contacting " + medical.entity);
+        }
+        if(criminal){
+            session.send(session, "Contacting " + criminal.entity);
+        }
+        if(environmental){
+            session.send(session, "Contacting " + environmental.entity);
         }
         else{
-
-            session.send(session, "Here is what I know about " + medical.entity);
-        }
-        if(!criminal){
-            builder.Prompts.text(session, "What kind of crimes would you like to know about?");
-        }
-        else{
-            session.send(session, "Here is what I know about " + criminal.entity);
-        }
-        if(!environmental){
-            builder.Prompts.text(session, "What environmental issues would you like to know about?");
-        }
-        else
-        {
-            builder.Prompts.text(session, "Here is what I know about " + environmental.entity);
+            session.send(session, "Contacting no one");
         }
     },
     function (session, results) {
