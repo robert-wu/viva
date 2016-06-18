@@ -132,33 +132,6 @@ dialog.on('Greeting',  [
     // }
 ]);
 
-bot.add('/country', [
-    function (session) {
-        builder.Prompts.text(session, "Hello... Give me a country?");
-    },
-    function (session, results) {
-        country = results.response;
-        for(i=0; i< curData['countryData']['data'].length;i++){
-            if(curData['countryData']['data'][i]['Country']['Name'] == country){
-                out = "";
-                if(curData['countryData']['data'][i]['Fire']['All'][0]!=""){
-                    out += ", Fire: " + curData['countryData']['data'][i]['Fire']['All'][0];
-                }
-                if(curData['countryData']['data'][i]['Ambulance']['All'][0]!=""){
-                    out += ", Ambulance: " + curData['countryData']['data'][i]['Ambulance']['All'][0];
-                }
-                if(curData['countryData']['data'][i]['Police']['All'][0]!=""){
-                    out += ", Police: " + curData['countryData']['data'][i]['Police']['All'][0];
-                }
-                if(curData['countryData']['data'][i]['Dispatch']['All'][0]!=""){
-                    out += ", Dispatch: " + curData['countryData']['data'][i]['Dispatch']['All'][0];
-                }
-                session.send(out.substring(2,200));
-            }
-        }
-    }
-]);
-
 dialog.on('GetInformation', [
      /*function (session) {
         session.send('Your important phone numbers are include ' + curData['numbers']);
@@ -374,51 +347,7 @@ dialog.on('SetupUserProfile', [
         
         myFirebaseRef.child(session.userData.name).set(session.userData);
         country = session.userData.country;
-        //session.send(country);
-        URLBuilder = 'https://restcountries.eu/rest/v1/name/'+ country;
-        //3console.log(URLBuilder);
-        HTTPRequest(URLBuilder, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                //console.log(body);
-                obj= JSON.parse(body);
-                //console.log(obj[0].alpha2Code);
-                URLBuilder2 = 'http://emergencynumberapi.com/api/country/'+obj[0].alpha2Code;
-                //session.send(URLBuilder2);
-                //console.log(URLBuilder2);
-                HTTPRequest(URLBuilder2, function(error2, response2, body2) {
-                    if (!error2 && response2.statusCode == 200) {
-                        //console.log(body);
-                        obj2 = JSON.parse(body2);
-                        out = "";
-                        if(obj2.data.fire.all[0]!=""){
-                            out += ", Fire: " + obj2.data.fire.all[0];
-                        }
-                        if(obj2.data.ambulance.all[0]!=""){
-                            out += ", Ambulance: " + obj2.data.ambulance.all[0];
-                        }
-                        if(obj2.data.police.all[0]!=""){
-                            out += ", Police: " + obj2.data.police.all[0];
-                        }
-                        if(obj2.data.dispatch.all[0]!=""){
-                            out += ", Dispatch: " + obj2.data.dispatch.all[0];
-                        }
-                        session.userData.numbers = out.substring(2,200);
-                        myFirebaseRef.child(session.userData.name).set(session.userData);
-                        //myFirebaseRef.child(session.userData.name).child('numbers').set(session.userData.numbers);
-                        //console.log(obj2);
-                    }
-                    else if(error2){
-                        console.log(error2);
-                    }
-                });
-            }
-            else if(error){
-                console.log(error);
-            }
-        });
-
-        //session.send("Thanks for your responses. They have been recorded");
-        
+        session.send(country);
     }
 ]);
 
