@@ -56,7 +56,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        builder.Prompts.choice(session, "Hey " + currData[lastUsedName]['name'].  + " Is there an emergency?", "Yes|No");
+        builder.Prompts.choice(session, "Hey " + currData[lastUsedName]['name']  + ". Is there an emergency?", "Yes|No");
         //next();
     },
     function (session, results) {
