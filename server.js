@@ -114,6 +114,7 @@ dialog.on('SetupUserProfile', [
 dialog.on('GetInformation', [
     function (session, args, next) {
         //session.send("getting information for ya " );
+        session.send(JSON.stringify(session.message.location));
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
     	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
@@ -123,23 +124,40 @@ dialog.on('GetInformation', [
            // response: organization.entity;
             
             if(organization.entity === "police" ){
-                session.sendMessage( "Here is what I know about " + JSON.stringify(organization.entity));
-              //  session.sendMessage( "this is" + organization.entity);
-                console.log("police printout");
-                session.beginDialog('/police');
+                session.send(" ");
             }
-            if(organization.entity === "fire station" ){
-                session.beginDialog('fireStation');
+            else if(organization.entity === "fire station" ){
+                session.send(" ");
             }
-            if(organization.entity === "hospital" ){
-                session.beginDialog('hospital');
+            else if(organization.entity === "hospital" ){
+                session.send(" ");
             }
-            if(organization.entity === "embassy" ){
-                session.beginDialog('embassy');
+            else if(organization.entity === "embassy" ){
+               session.send(" ");
             }
         }
         else if(medical){
-            session.send( "Here is what I know about " + medical.entity);
+            if(medical.entity === "heart attack" ){
+                session.send("A heart attack usually occurs when there is blockage in one of the heart's arteries." +
+                    " This is an emergency that can cause death. It requires quick action. " + 
+                    "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives.");
+            }
+            else if(medical.entity === "broken bone" ){
+                session.send(" ");
+            }
+            else if(medical.entity === "not breathing" ){
+                session.send(" ");
+            }
+            else if(medical.entity === "suicide" ){
+               session.send(" ");
+            }
+            else if(medical.entity === "gun wound" ){
+               session.send(" ");
+            }
+            else if(medical.entity === "burn" ){
+               session.send(" ");
+            }
+            //session.send( "Here is what I know about " + medical.entity);
             next({ response: medical.entity });
         }
         else if(criminal){
