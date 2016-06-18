@@ -195,7 +195,7 @@ dialog.on('GetInformation', [
                 "promote healing. But if you suspect you may have a more severe injury, use first-aid measures while you arrange for an evaluation " +
                 "by your doctor.");
             }
-            session.beginDialog('Greeting');
+            session.reset();
            // session.endDialog();
             //session.send( "Here is what I know about " + medical.entity);
             //next({ response: medical.entity });
@@ -228,10 +228,7 @@ dialog.on('GetInformation', [
             else if(criminal.entity === "terrorist attack" ){
                 session.beginDialog('/TerroristAttack');
             }
-            else {
-                session.send("Could not find information about criminal disasters.");
-            }
-            session.endDialog();
+            session.reset();
         }
         else if(environmental)
         {
@@ -253,21 +250,22 @@ dialog.on('GetInformation', [
                      "unless you live in an unreinforced adode structure; otherwise, you're more likely to be hurt by the door swinging wildly in a doorway" + 
                      "or trampled by people trying to hurry outside if you’re in a public place.");
             }
-            else if(environment.entity === "fire" ){
+            else if(environmental.entity === "fire" ){
                session.send("The average response time for the fire service is 14 minutes. Therefore, you are on your own and must function as " +
                 "your own fire fighter for the first several minutes. 'Rescue, alarm, extinguish' is a simple rule to help you remember what to do " + 
                 "in the event of a fire. You will have to determine the order in which you address these points, depending on your assessment of " +
                 "the situation.");
             }
-            else{
+            
                 session.reset();
 
-            }
+            
             //session.send( "Here is what I know about " + environmental.entity);
             //next({ response: environmental.entity });
         }
         else{
             session.send("I couldn't find any relevant information :(");
+            session.reset();
             //next({ response: organization.entity });
         }
     }
@@ -323,7 +321,7 @@ bot.add('/TerroristAttack', [
 "Clean-up may take many months."
             );
         } 
-        session.endDialog();
+        session.reset();
     } 
 ]);
 
@@ -378,7 +376,7 @@ bot.add('/Tornado', [
             "be designated by FEMA."
             );
         }   
-        session.endDialog();
+        session.reset();
 
     } 
 ]);
