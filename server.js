@@ -143,7 +143,6 @@ dialog.on('GetInformation', [
 
 dialog.on('ContactOrganization', [
     function (session, args) {
-    	 function (session, args) {
         var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
         var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
         var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
