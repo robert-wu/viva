@@ -61,7 +61,7 @@ dialog.on('Greeting',  [
     },
     function (session, results) {
         if(results.response.entity == "Yes"){
-            builder.Prompts.text(session,"What city are you in");                
+            builder.Prompts.text(session,"Now recording your emergency status. What city are you in?");                
         }
         else{
             session.send("Good! Do you need anything else?");
@@ -101,11 +101,11 @@ dialog.on('Greeting',  [
 
                     to:'+16303019617', // Any number Twilio can deliver to
                     from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-                    body: 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['medicalConditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number'] // body of the SMS message
+                    body: '\n' + 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['medicalConditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number']  + '\n' + "Allergies: " + currData['medicationAllergies'] // body of the SMS message
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
-                    session.send("Your health and contact information has been sent to a local dispatcher at " + dispatchNumber + " at city " + city  + ". You will receive a phone call shortly from emergency services.");
+                    session.send("Your health and contact information has been sent to a local dispatcher at number" + dispatchNumber + " in the city " + city  + ". You will receive a phone call shortly from emergency services.");
                     if (!err) { // "err" is an error received during the request, if any
 
                         // "responseData" is a JavaScript object containing data received from Twilio.
@@ -157,6 +157,7 @@ dialog.on('GetInformation', [
             else if(organization.entity === "embassy" ){
                session.send("The nearest embassy to you is...");
             }
+            session.endDialog();
         }
         else if(medical){
             if(medical.entity === "heart attack" ){
@@ -194,12 +195,42 @@ dialog.on('GetInformation', [
                 "promote healing. But if you suspect you may have a more severe injury, use first-aid measures while you arrange for an evaluation " +
                 "by your doctor.");
             }
+            session.endDialog();
             //session.send( "Here is what I know about " + medical.entity);
             //next({ response: medical.entity });
         }
         else if(criminal){
-            session.send( "Here is what I know about " + criminal.entity);
-            //next({ response: criminal.entity });
+            if(criminal.entity === "missing person" ){
+                session.send("In the case of a missing person, contact your nearest police station and report a missing persons case. Ask that the " +
+                    "missing persons case report be sent to the FBI’s National Crime Information Center (https://www.fbi.gov/about-us/cjis/ncic). and " +
+                    "the National Missing and Unidentified Persons System (http://www.namus.gov/). If you believe the missing person may be dead, " +
+                    "ask if the coroner or medical examiner can take a DNA sample from a family member or the person’s belongings to be compared " +
+                    "against the DNA of any unidentified remains.");
+            }
+            else if(criminal.entity === "robbed" ){
+                session.send("In the case of a robbery, stay calm, consider that the safety of you, your customers, and your staff is paramount, " +
+                    "and remember as many details as possible. When the incident is over, do not confer with other witnesses and avoid re-watching " +
+                    "the surveillance footage as this may affect your memory. Remember that anything touched or left by the robbers is evidence so " +
+                    "do not touch anything touched or left by offenders. Fingerprints and DNA can lead to a successful prosecution.");
+            }
+            else if(criminal.entity === "assaulted" ){
+                session.send("Assault is a physical attack or a threat that causes fear of an attack. Victims of assault may be attacked by one or " +
+                    "more people. An assault may include one or more types of harm, such as pushing, shoving, slapping, punching, or kicking. " +
+                    "It may also include the use of weapons like knives, sticks, bottles, or bats. Common injuries from an assault include bruises, " +
+                    "black eyes, cuts, scratches, and broken bones. Victims may even be killed during an assault. Even if the attack results in no " +
+                    "physical injury to the victim, it still can be considered an assault.Assault can happen to anyone. Most teen victims of " +
+                    "assault report that they know who attacked them, and often the attacker is a family member, friend, or someone the victim " +
+                    "knows from school or the neighborhood. If someone assaults you, it is important to tell an adult you trust and to contact " +
+                    "the police. Being assaulted is not your fault. It is important to remember that assault is a crime, and as an assault victim, " +
+                    "you do not have to deal with this alone. There are people in your community who can help you.");
+            }
+            else if(criminal.entity === "terrorist attack" ){
+                session.beginDialog('/TerroristAttack');
+            }
+            else {
+                session.send("Could not find information about criminal disasters.");
+            }
+            session.endDialog();
         }
         else if(environmental)
         {
@@ -227,11 +258,13 @@ dialog.on('GetInformation', [
                 "in the event of a fire. You will have to determine the order in which you address these points, depending on your assessment of " +
                 "the situation.");
             }
+            session.endDialog();
             //session.send( "Here is what I know about " + environmental.entity);
             //next({ response: environmental.entity });
         }
         else{
             session.send("Here is what I know about nothing.");
+            session.endDialog();
             //next({ response: organization.entity });
         }
     }
@@ -246,6 +279,51 @@ dialog.on('GetInformation', [
 
     
 ]);
+
+bot.add('/TerroristAttack', [
+    function (session) {
+        builder.Prompts.choice(session, "What about terrorist attacks would you like to learn?", "Summary|How to Prepare|In The Event Of|Possible Outcomes");
+    },
+    function (session, results) {
+        if(results.response.entity == "Summary"){
+            session.send("Terrorist attacks like the ones we experienced on September 11, 2001 have left many concerned about the possibility " +
+                "of future incidents of terrorism in the United States and their potential impact. They have raised uncertainty about what might " +
+                "happen next, increasing stress levels. There are things you can do to prepare for terrorist attacks and reduce the stress that " +
+                "you may feel now and later should another emergency arise. Taking preparatory action can reassure you and your children that " +
+                "you can exert a measure of control even in the face of such events."
+                );
+        }
+        else if(results.response.entity == "How to Prepare"){
+            session.send(
+            "Finding out what can happen is the first step. Once you have determined the events possible and their potential in your community, " +
+            "it is important that you discuss them with your family or household. Develop a disaster plan together. Also, prepare an emergency kit. The emergency kit" +
+            " should be easily accessible should you and your family be forced to shelter in place (stay at home) for a period of time. Be wary of suspicious " +
+            "packages and letters. They can contain explosives, chemical or biological agents. Be particularly cautious at your place of employment. "
+            );
+        }
+        else if (results.response.entity == "In The Event Of"){
+            session.send(
+            "Remain calm and be patient. Follow the advice of local emergency officials. Listen to your radio or television for news and instructions." +
+"If the event occurs near you, check for injuries. Give first aid and get help for seriously injured people. If the event occurs near your home while you are there, check for damage using a flashlight. Do not light matches or candles or turn on electrical switches. Check for fires, fire hazards and other household hazards. Sniff for gas leaks, starting at the water heater. If you smell gas or suspect a leak, turn off the main gas valve, open windows, and get everyone outside quickly. " +
+"Shut off any other damaged utilities. Confine or secure your pets. Call your family contact—do not use the telephone again unless it is a life-threatening emergency." +
+"Check on your neighbors, especially those who are elderly or disabled."
+            );
+        } else if (results.response.entity == "Possible Outcomes"){
+            session.send(
+            "As we’ve learned from previous events, the following things can happen after a terrorist attack: " +
+"There can be significant numbers of casualties and/or damage to buildings and the infrastructure. So employers need up-to-date information about any medical needs you may have and on how to contact your designated beneficiaries. " +
+"Heavy law enforcement involvement at local, state and federal levels follows a terrorist attack due to the event's criminal nature. " +
+"Health and mental health resources in the affected communities can be strained to their limits, maybe even overwhelmed. " +
+"Extensive media coverage, strong public fear and international implications and consequences can continue for a prolonged period. " +
+"Workplaces and schools may be closed, and there may be restrictions on domestic and international travel. " +
+"You and your family or household may have to evacuate an area, avoiding roads blocked for your safety. " +
+"Clean-up may take many months."
+            );
+        } 
+        session.endDialog();
+    } 
+]);
+
 
 bot.add('/Tornado', [
     function (session) {
@@ -296,9 +374,9 @@ bot.add('/Tornado', [
             "extensive, don't panic. The American Red Crossand other volunteer agencies will arrive with food and water, and temporary housing will " +
             "be designated by FEMA."
             );
-        }  else {
-            session.endDialog();
-        }
+        }   
+        session.endDialog();
+
     } 
 ]);
 
@@ -340,9 +418,8 @@ bot.add('/HeartAttack', [
             "There are many ways to prevent heart disease. These include quitting smoking, exercising more, and reducing stress. " +
             "Maintaining a healthy and balanced diet is also key."
             );
-        }  else {
-            session.endDialog();
         }
+        session.endDialog();
     } 
 ]);
 
@@ -350,10 +427,10 @@ bot.add('/HeartAttack', [
 
 dialog.on('SetupUserProfile', [
     function (session) {
-        builder.Prompts.text(session, "Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
+        builder.Prompts.text(session, "Welcome!, I'm Viva. Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
     },
     function (session, results) {
-        if (results.response == "Bye") 
+        if (results.response == "Crash") 
         {
             session.endDialog();
         }
@@ -387,7 +464,7 @@ dialog.on('SetupUserProfile', [
             session.endDialog();
         }
         session.userData.country = results.response;
-        builder.Prompts.text(session, "What is your date of birth"); 
+        builder.Prompts.text(session, "What is your date of birth?"); 
     },
     function (session, results) {
         if (results.response == "Crash") 
@@ -411,7 +488,7 @@ dialog.on('SetupUserProfile', [
             session.endDialog();
         }
         session.userData.medicationAllergies = results.response;
-        builder.Prompts.text(session, "Last one! What is your health provider"); 
+        builder.Prompts.text(session, "Last one! What is your health provider?"); 
     },
     function (session, results) {
         if (results.response == "Crash") 
