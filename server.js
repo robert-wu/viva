@@ -54,6 +54,17 @@ dialog.on('Greeting',  [
 ]);
 
 dialog.on('GetInformation', [
+    function (session, results) {
+         if (results.response) {
+            if(results.response == "police")
+            {
+            }
+            session.send("Ok... Added the '%s' task.", results.response);
+        }
+    },
+     function (session) {
+        session.send('Your important phone numbers are include ' + curData['numbers']);
+    },
     function (session, args, next) {
         //session.send("getting information for ya " );
        // session.send(JSON.stringify(session));
@@ -160,20 +171,55 @@ dialog.on('GetInformation', [
             session.send("Here is what I know about nothing.");
             //next({ response: organization.entity });
         }
+    }
+
+    
+]);
+
+
+
+dialog.on('SetupUserProfile', [
+    function (session) {
+        builder.Prompts.text(session, "Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
     },
     function (session, results) {
-         if (results.response) {
-            if(results.response == "police")
-            {
-            }
-            session.send("Ok... Added the '%s' task.", results.response);
+        session.userData.name = results.response;
+        if(curData[results.response] !== undefined){
+            sender.send('You are already registered');
+        }
+        else{
+            builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex"); 
         }
     },
-     function (session) {
-        builder.Prompts.text(session, "Hello... Give me a country?");
+    function (session, results) {
+        session.userData.sex = results.response;
+        builder.Prompts.number(session, "What is your phone number?"); 
     },
     function (session, results) {
-        country= results.response;
+        session.userData.number = results.response;
+        builder.Prompts.text(session, "What is your country?"); 
+    },
+    function (session, results) {
+        session.userData.country = results.response;
+        builder.Prompts.text(session, "What is your date of birth"); 
+    },
+    function (session, results) {
+        session.userData.DoB = results.response;
+        builder.Prompts.text(session, "Do you have any existing medical conditions?");
+    },
+    function (session, results) {
+        session.userData.medicalConditions = results.response;
+        builder.Prompts.text(session, "Are you allergic to any medications?"); 
+    },
+    function (session, results) {
+        session.userData.medicationAllergies = results.response;
+        builder.Prompts.text(session, "What is your health provider"); 
+    },
+    function (session, results) {
+        session.userData.healthProvider = results.response;
+        session.send("Thanks for your responses. They have been recorded");
+        myFirebaseRef.child(session.userData.name).set(session.userData);
+        country= session.userData.country;
         //session.send(country);
         URLBuilder = 'https://restcountries.eu/rest/v1/name/'+ country;
         //3console.log(URLBuilder);
@@ -202,7 +248,8 @@ dialog.on('GetInformation', [
                         if(obj2.data.dispatch.all[0]!=""){
                             out += ", Dispatch: " + obj2.data.dispatch.all[0];
                         }
-                        session.send(out.substring(2,200));
+                        session.userData.numbers = out.substring(2,200);
+                        myFirebaseRef.child(session.userData.name).child('numbers').set(session.userData.numbers);
                         //console.log(obj2);
                     }
                     else if(error2){
@@ -214,51 +261,7 @@ dialog.on('GetInformation', [
                 console.log(error);
             }
         });
-        console.log(data.code);
-    },
-
-    
-]);
-
-
-
-dialog.on('SetupUserProfile', [
-    function (session) {
-        builder.Prompts.text(session, "Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
-    },
-    function (session, results) {
-        session.userData.name = results.response;
-        if(curData[results.response] !== undefined){
-            sender.send('You are already registered');
-        }
-        else{
-            builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex"); 
-        }
-    },
-    function (session, results) {
-        session.userData.sex = results.response;
-        builder.Prompts.number(session, "What is your phone number?"); 
-    },
-    function (session, results) {
-        session.userData.number = results.response;
-        builder.Prompts.text(session, "What is your date of birth"); 
-    },
-    function (session, results) {
-        session.userData.DoB = results.response;
-        builder.Prompts.text(session, "Do you have any existing medical conditions?");
-    },
-    function (session, results) {
-        session.userData.medicalConditions = results.response;
-        builder.Prompts.text(session, "Are you allergic to any medications?"); 
-    },
-    function (session, results) {
-        session.userData.medicationAllergies = results.response;
-        builder.Prompts.text(session, "What is your health provider"); 
-    },
-    function (session, results) {
-        session.userData.healthProvider = results.response;
-        session.send("Thanks for your responses. They have been recorded"); 
-        myFirebaseRef.child(session.userData.name).set(session.userData);
+        
     }
 ]);
 
