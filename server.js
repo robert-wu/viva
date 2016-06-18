@@ -105,7 +105,7 @@ dialog.on('Greeting',  [
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
-                    session.send("Your health and contact information has been sent to a local dispatcher at number" + dispatchNumber + " in the city " + city  + ". You will receive a phone call shortly from emergency services.");
+                    session.send("Your health and contact information has been sent to a local dispatcher at number " + dispatchNumber + " in the city " + city  + ". You will receive a phone call shortly from emergency services.");
                     if (!err) { // "err" is an error received during the request, if any
 
                         // "responseData" is a JavaScript object containing data received from Twilio.
@@ -419,7 +419,7 @@ bot.add('/HeartAttack', [
             "Maintaining a healthy and balanced diet is also key."
             );
         }
-        session.endDialog();
+        builder.DialogAction.endDialog();
     } 
 ]);
 
