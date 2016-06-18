@@ -9,7 +9,7 @@ var botConnectorOptions = {
 
 // Create bot
 var bot = new builder.BotConnectorBot(botConnectorOptions);
-
+//var bot = new builder.TextBot();
 // Setup Restify Server
 var server = restify.createServer();
 
@@ -33,7 +33,7 @@ bot.add('/', dialog);
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
-dialog.on('/Greeting',  [
+dialog.on('Greeting',  [
     function (session) {
         session.send("Hello, I'm Viva.");
     },
@@ -43,64 +43,64 @@ dialog.on('/Greeting',  [
     
 ]);
 
-dialog.on('/SetupUserProfile', [
+dialog.on('SetupUserProfile', [
     function (session) {
-        session.send(session, "Let’s set up your profile.");
+        session.send("Let’s set up your profile.");
     },
     function (session) {
-        session.send(session, " In the case of an emergency, we can communicate your personal information to emergency service operators.");
+        session.send( " In the case of an emergency, we can communicate your personal information to emergency service operators.");
     },
     function (session) {
-        session.send(session, "What is your full name?");
+        session.send( "What is your full name?");
     },
     function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "What is your sex?");
+        session.send( "What is your sex?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "What is your phone number?");
+        session.send( "What is your phone number?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "What is the phone number of your primary emergency contact?");
+        session.send( "What is the phone number of your primary emergency contact?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "What is your date of birth?");
+        session.send( "What is your date of birth?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "Do you have any existing medical conditions?");
+        session.send( "Do you have any existing medical conditions?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "Are you allergic to any medication?");
+        session.send( "Are you allergic to any medication?");
     },
      function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
     function (session) {
-        session.send(session, "Who is your health provider?");
+        session.send( "Who is your health provider?");
     },
      function (session, results) {
         session.userData.name = results.response;
@@ -112,8 +112,7 @@ dialog.on('/SetupUserProfile', [
 
 dialog.on('GetInformation', [
     function (session, args) {
-                    session.send(session, "getting information for ya " );
-
+        session.send("getting information for ya " );
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
     	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
@@ -121,20 +120,20 @@ dialog.on('GetInformation', [
 
         if(organization){
            // response: organization.entity;
-            session.send(session, "Here is what I know about " + organization.entity);
+            session.send( "Here is what I know about " + organization.entity);
         }
         if(medical){
-            session.send(session, "Here is what I know about " + medical.entity);
+            session.send( "Here is what I know about " + medical.entity);
         }
         if(criminal){
-            session.send(session, "Here is what I know about " + criminal.entity);
+            session.send( "Here is what I know about " + criminal.entity);
         }
     	if(environmental)
     	{
-            session.send(session, "Here is what I know about " + environmental.entity);
+            session.send( "Here is what I know about " + environmental.entity);
     	}
         else{
-            session.send(session, "Here is what I know about nothing.");
+            session.send("Here is what I know about nothing.");
         }
     },
     function (session, results) {
@@ -152,19 +151,19 @@ dialog.on('ContactOrganization', [
 
         if(organization){
            // response: organization.entity;
-            session.send(session, "Contacting " + organization.entity);
+            session.send( "Contacting " + organization.entity);
         }
         if(medical){
-            session.send(session, "Contacting " + medical.entity);
+            session.send( "Contacting " + medical.entity);
         }
         if(criminal){
-            session.send(session, "Contacting " + criminal.entity);
+            session.send( "Contacting " + criminal.entity);
         }
         if(environmental){
-            session.send(session, "Contacting " + environmental.entity);
+            session.send( "Contacting " + environmental.entity);
         }
         else{
-            session.send(session, "Contacting no one");
+            session.send( "Contacting no one");
         }
     },
     function (session, results) {
@@ -172,3 +171,5 @@ dialog.on('ContactOrganization', [
 
     }
 ]);
+
+
