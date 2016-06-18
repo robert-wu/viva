@@ -58,6 +58,7 @@ dialog.on('Greeting',  [
 
             }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
+                session.send("Your contact information has been received, you will receive a phone call soon");
                 if (!err) { // "err" is an error received during the request, if any
 
                     // "responseData" is a JavaScript object containing data received from Twilio.
@@ -74,7 +75,7 @@ dialog.on('Greeting',  [
             });
         }
         else{
-            builder.Prompts.text(session, "Good! Do you need anything else?");
+            session.send("Good! Do you need anything else?");
         }
     }
     //,
