@@ -440,9 +440,9 @@ dialog.on('SetupUserProfile', [
         /*if(curData[results.response] !== undefined){
             sender.send('You are already registered');
         }*/
-        else{
-            builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex?"); 
-        }
+        
+        builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex?"); 
+        
     },
     function (session, results) {
         if (results.response == "Crash") 
