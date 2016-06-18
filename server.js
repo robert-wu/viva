@@ -44,7 +44,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        session.sendMessage("Hi, I'm Viva.\n\n\n\n I’m here to help you in the case of an emergency.");
+        session.send("Hi, I'm Viva.\n\n\n\n I’m here to help you in the case of an emergency.");
         //next();
     }
     //,
@@ -99,7 +99,8 @@ dialog.on('GetInformation', [
             }
         });
         console.log(data.code);
-    },
+    }
+    /*,
     function (session, args, next) {
         //session.send("getting information for ya " );
        // session.send(JSON.stringify(session));
@@ -113,7 +114,7 @@ dialog.on('GetInformation', [
             
             if(organization.entity === "police" ){
                 session.send(" ");
-            }
+            }   
             else if(organization.entity === "fire station" ){
                 session.send(" ");
             }
@@ -171,7 +172,7 @@ dialog.on('GetInformation', [
             }
             session.send("Ok... Added the '%s' task.", results.response);
         }
-    }
+    }*/
 ]);
 
 
