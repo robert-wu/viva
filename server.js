@@ -50,7 +50,13 @@ dialog.on('Greeting',  [
     },
     function (session, results) {
         if(results.response.entity == "Yes"){
-                client.sendMessage({
+            builder.Prompts.text(session,"What city are you in");
+                
+        }
+        function(session, results) {
+
+            
+            client.sendMessage({
 
                 to:'+16303019617', // Any number Twilio can deliver to
                 from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
@@ -74,6 +80,7 @@ dialog.on('Greeting',  [
                 }
             });
         }
+
         else{
             session.send("Good! Do you need anything else?");
         }
@@ -275,8 +282,9 @@ bot.add('/HeartAttack', [
                 session.send(
                 "Search for something else!"
                 );
+                session.endDialog();
             }  else {
-                session.send("Sorry I did not get that.")
+                session.endDialog();
             }
         } 
 ]);
