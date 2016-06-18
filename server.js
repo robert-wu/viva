@@ -35,7 +35,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        session.send("Hi, I'm Viva.\n\n I'm here to help you.  hello");
+        session.send("Hi, I'm Viva.\n\n\n\n I’m here to help you in the case of an emergency.");
         //next();
     }
     //,
