@@ -195,7 +195,8 @@ dialog.on('GetInformation', [
                 "promote healing. But if you suspect you may have a more severe injury, use first-aid measures while you arrange for an evaluation " +
                 "by your doctor.");
             }
-            session.endDialog();
+            session.beginDialog('Greeting');
+           // session.endDialog();
             //session.send( "Here is what I know about " + medical.entity);
             //next({ response: medical.entity });
         }
@@ -263,8 +264,8 @@ dialog.on('GetInformation', [
             //next({ response: environmental.entity });
         }
         else{
-            session.send("Here is what I know about nothing.");
-            session.endDialog();
+            session.send("I couldn't find any relevant information :(");
+            session.beginDialog('Greeting');
             //next({ response: organization.entity });
         }
     }
