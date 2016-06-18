@@ -312,6 +312,10 @@ dialog.on('SetupUserProfile', [
         builder.Prompts.text(session, "Let’s set up your profile.\n\n\n\nIn the case of an emergency, we can communicate your personal information to emergency service operators.\n\n\n\nWhat is your full name?");
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.name = results.response;
         if(curData[results.response] !== undefined){
             sender.send('You are already registered');
@@ -321,30 +325,58 @@ dialog.on('SetupUserProfile', [
         }
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.sex = results.response;
         builder.Prompts.number(session, "What is your phone number?"); 
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.number = results.response;
         builder.Prompts.text(session, "What is your country?"); 
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.country = results.response;
         builder.Prompts.text(session, "What is your date of birth"); 
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.DoB = results.response;
         builder.Prompts.text(session, "Do you have any existing medical conditions?");
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.medicalConditions = results.response;
         builder.Prompts.text(session, "Are you allergic to any medications?"); 
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.medicationAllergies = results.response;
         builder.Prompts.text(session, "Last one! What is your health provider"); 
     },
     function (session, results) {
+        if (results.response == "Bye") 
+        {
+            session.endDialog();
+        }
         session.userData.healthProvider = results.response;
         
         myFirebaseRef.child(session.userData.name).set(session.userData);
