@@ -51,7 +51,7 @@ server.listen(process.env.port || 3978, function () {
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
 bot.add('/', dialog);
 
-dialog.onDefault(builder.dialogAction().beginDialog('Greeting'));
+dialog.onDefault("I am sorry I didn't understand.");
 
 
 dialog.on('Greeting',  [
@@ -196,7 +196,7 @@ dialog.on('GetInformation', [
                 "promote healing. But if you suspect you may have a more severe injury, use first-aid measures while you arrange for an evaluation " +
                 "by your doctor.");
             }
-            session.reset();
+            session.endDialog();
            // session.endDialog();
             //session.send( "Here is what I know about " + medical.entity);
             //next({ response: medical.entity });
@@ -229,7 +229,7 @@ dialog.on('GetInformation', [
             else if(criminal.entity === "terrorist attack" ){
                 session.beginDialog('/TerroristAttack');
             }
-            session.reset();
+            session.endDialog();
         }
         else if(environmental)
         {
@@ -258,7 +258,7 @@ dialog.on('GetInformation', [
                 "the situation.");
             }
             
-                session.reset();
+                session.endDialog();
 
             
             //session.send( "Here is what I know about " + environmental.entity);
@@ -266,7 +266,7 @@ dialog.on('GetInformation', [
         }
         else{
             session.send("I couldn't find any relevant information :(");
-            session.reset();
+            session.endDialog();
             //next({ response: organization.entity });
         }
     }
@@ -322,7 +322,7 @@ bot.add('/TerroristAttack', [
 "Clean-up may take many months."
             );
         } 
-        session.reset();
+        session.endDialog();
     } 
 ]);
 
@@ -377,7 +377,7 @@ bot.add('/Tornado', [
             "be designated by FEMA."
             );
         }   
-        session.reset();
+        session.endDialog();
 
     } 
 ]);
