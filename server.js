@@ -124,7 +124,7 @@ dialog.on('GetInformation', [
             
             if(organization.entity === "police" ){
                 session.send( "Here is what I know about " + organization.entity);
-                session.beginDialog('police');
+                session.replaceDialog('/police');
             }
             if(organization.entity === "fire station" ){
                 session.beginDialog('fireStation');
@@ -166,7 +166,7 @@ dialog.on('GetInformation', [
     }
 ]);
 
-dialog.on('police',[
+bot.add('/police',[
     function (session) {
         session.send('Police phone number is blah blah blah.');
     }
