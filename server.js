@@ -50,7 +50,7 @@ dialog.on('Greeting',  [
     },
     function (session, results) {
         if(results.response.entity == "Yes"){
-                        client.sendMessage({
+                client.sendMessage({
 
                 to:'+16303019617', // Any number Twilio can deliver to
                 from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
@@ -84,7 +84,7 @@ dialog.on('Greeting',  [
     // }
 ]);
 
-bot.add('/', [
+/*bot.add('/', [
     function (session) {
         builder.Prompts.text(session, "Hello... Give me a country?");
     },
@@ -109,7 +109,7 @@ bot.add('/', [
             }
         }
     }
-]);
+]);*/
 
 dialog.on('GetInformation', [
      function (session) {
@@ -140,53 +140,7 @@ dialog.on('GetInformation', [
         }
         else if(medical){
             if(medical.entity === "heart attack" ){
-                function (session) {
-                    builder.Prompts.choice(session, "What about heart attacks would you like to learn about?", "Summary|Symptoms|Emergency|Prevention|Refresh");
-                },
-                function (session, results) {
-                    if(results.response.entity == "Summary"){
-                        client.sendMessage({ 
-                        "A heart attack usually occurs when there is blockage in one of the heart's arteries." +
-                    " This is an emergency that can cause death. It requires quick action. " + 
-                    "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives."
-                        })
-                    }, else if(results.response.entity == "Symptoms"){
-                    client.sendMessage({
-                        "Common heart attack symptoms and warning signs may include: " +  
-                        "Chest discomfort that feels like pressure, fullness, or a squeezing pain in the center of your " +
-                        "chest; it lasts for more than a few minutes, or goes away and comes back. Pain and discomfort that " +
-                        "extend beyond your chest to other parts of your upper body, such as one or both arms, back, neck, " +
-                        "stomach,teeth, and jaw. Unexplained shortness of breath, with or without chest discomfort " +
-                        "Other symptoms, such as cold sweats, nausea or vomiting, lightheadedness, anxiety, indigestion, and " +
-                        "unexplained fatigue"
-                        })
-                    }, else if (results.response.entity == "Emergency"){
-                    client.sendMessage({
-                        "If you or someone you are with experiences chest discomfort or other heart attack symptoms, call 911 " +
-                        "right away. Do not wait more than 5 minutes to make the call. While your first impulse may be to drive " +
-                        "yourself or the heart attack victim to the hospital, it is better to call 911. Emergency medical services " +
-                        "(EMS) personnel can begin treatment on the way to the hospital and are trained to revive a person if his " +
-                        "heart stops. If you witness heart attack symptoms in someone and are unable to reach EMS, drive the " +
-                        "person to the hospital. If you are experiencing heart attack symptoms, do not drive yourself to the " +
-                        "hospital unless you have no other choice."
-                        })
-                    }, else if (results.response.entity == "Prevention"){
-                        client.sendMessage({
-                        "There are many ways to prevent heart disease. These include quitting smoking, exercising more, and reducing stress. " +
-                        "Maintaining a healthy and balanced diet is also key."
-                        })
-                    }, else if (results.response.entity == "Refresh"){
-                        client.sendMessage({
-                        "Search for something else!"
-                        })
-                    }  
-                } 
-            }
-            else{
-                session.send("Good! Do you need anything else?");
-            }
-    }
-
+                session.replaceDialog('HeartAttack');
             }
             else if(medical.entity === "broken bone" ){
                 session.send("It is hard to tell a dislocated joint from a broken bone. However, both are emergency situations, " + 
@@ -276,6 +230,54 @@ dialog.on('GetInformation', [
     // },
 
     
+]);
+
+dialog.on('HeartAttack', [
+        function (session) {
+            builder.Prompts.choice(session, "What about heart attacks would you like to learn about?", "Summary|Symptoms|Emergency|Prevention|Refresh");
+        },
+        function (session, results) {
+            if(results.response.entity == "Summary"){
+                session.send(
+                "A heart attack usually occurs when there is blockage in one of the heart's arteries." +
+            " This is an emergency that can cause death. It requires quick action. " + 
+            "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives."
+                );
+            }
+            else if(results.response.entity == "Symptoms"){
+                session.send(
+                "Common heart attack symptoms and warning signs may include: " +  
+                "Chest discomfort that feels like pressure, fullness, or a squeezing pain in the center of your " +
+                "chest; it lasts for more than a few minutes, or goes away and comes back. Pain and discomfort that " +
+                "extend beyond your chest to other parts of your upper body, such as one or both arms, back, neck, " +
+                "stomach,teeth, and jaw. Unexplained shortness of breath, with or without chest discomfort " +
+                "Other symptoms, such as cold sweats, nausea or vomiting, lightheadedness, anxiety, indigestion, and " +
+                "unexplained fatigue"
+                );
+            }
+            else if (results.response.entity == "Emergency"){
+                session.send(
+                "If you or someone you are with experiences chest discomfort or other heart attack symptoms, call 911 " +
+                "right away. Do not wait more than 5 minutes to make the call. While your first impulse may be to drive " +
+                "yourself or the heart attack victim to the hospital, it is better to call 911. Emergency medical services " +
+                "(EMS) personnel can begin treatment on the way to the hospital and are trained to revive a person if his " +
+                "heart stops. If you witness heart attack symptoms in someone and are unable to reach EMS, drive the " +
+                "person to the hospital. If you are experiencing heart attack symptoms, do not drive yourself to the " +
+                "hospital unless you have no other choice."
+                );
+            } else if (results.response.entity == "Prevention"){
+                session.send(
+                "There are many ways to prevent heart disease. These include quitting smoking, exercising more, and reducing stress. " +
+                "Maintaining a healthy and balanced diet is also key."
+                );
+            } else if (results.response.entity == "Refresh"){
+                session.send(
+                "Search for something else!"
+                );
+            }  else {
+                session.send("Sorry I did not get that.")
+            }
+        } 
 ]);
 
 
