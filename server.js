@@ -100,30 +100,29 @@ dialog.on('GetInformation', [
             }
         });
         console.log(data.code);
-    }
-    /*,
+    },
+
     function (session, args, next) {
         //session.send("getting information for ya " );
        // session.send(JSON.stringify(session));
-    	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
-		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
-    	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
-    	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Environmental');
-
+        var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
+        var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
+        var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
+        var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Environmental');
         if(organization){
            // response: organization.entity;
             
             if(organization.entity === "police" ){
-                session.send(" ");
-            }   
+                session.send("The nearest police station to you is...");
+            }
             else if(organization.entity === "fire station" ){
-                session.send(" ");
+                session.send("The nearest fire station to you is...");
             }
             else if(organization.entity === "hospital" ){
-                session.send(" ");
+                session.send("The nearest hospital to you is...");
             }
             else if(organization.entity === "embassy" ){
-               session.send(" ");
+               session.send("The nearest embassy to you is...");
             }
         }
         else if(medical){
@@ -133,47 +132,91 @@ dialog.on('GetInformation', [
                     "Do not ignore even minor heart attack symptoms. Immediate treatment lessens heart damage and saves lives.");
             }
             else if(medical.entity === "broken bone" ){
-                session.send(" ");
+                session.send("It is hard to tell a dislocated joint from a broken bone. However, both are emergency situations, " + 
+                    "and the basic first aid steps are the same. Symptoms of a broken bone include: 1) A visibly out-of-place or misshapen limb or joint 2) Swelling, bruising, or bleeding 3) Intense pain 4) Numbness and tingling" +
+                "5) Broken skin with bone protruding 6) Limited mobility or inability to move a limb");
             }
             else if(medical.entity === "not breathing" ){
-                session.send(" ");
+                session.send("If an adult is unconscious and not breathing, you’ll need to do CPR (which is short for cardiopulmonary resuscitation). " +
+                    "CPR involves giving someone a combination of chest compressions and rescue breaths to keep their heart and " +
+                    "circulation going to try to save their life. If they start breathing normally again, stop CPR and put them in the " +
+                    "recovery position.  Step 1: Check their airway. If they are unconscious, open their airway. Step 2: Check their breathing. " +
+                    "If they are not breathing, you need to start CPR (cardiopulmonary resuscitation – a combination of chest pressure and rescue breaths) straight away." +
+                    "Step 3: Call for help and start CPR. Step 4: Give chest compressions. Step 5: Give a rescue breath.");
             }
             else if(medical.entity === "suicide" ){
-               session.send(" ");
+               session.send("A suicidal person may not ask for help, but that doesn't mean that help isn't wanted. Most people who commit suicide " +
+                "don't want to die—they just want to stop hurting. Suicide prevention starts with recognizing the warning signs and taking them seriously. " +
+                "If you think a friend or family member is considering suicide, you might be afraid to bring up the subject. But talking openly about " +
+                "suicidal thoughts and feelings can save a life. If you're thinking about committing suicide, please read Suicide Help or call 1-800-273-TALK in the U.S.!" +
+                "To find a suicide helpline outside the U.S., visit IASP or Suicide.org.");
             }
             else if(medical.entity === "gun wound" ){
-               session.send(" ");
+               session.send("In most circumstances, you don’t want to remove an implanted bullet. It’s almost impossible to find, and it may actually " +
+                "be corking up a big blood vessel. Thousands of military members live daily with shrapnel in their bodies. Unless there’s initial " +
+                "infection from the wound itself, the body adapts to most metal without much serious problem. Gunshot wounds can run the gamut. " +
+                "Some people are too severely injured to save. Get expert treatment as soon as possible.");
             }
             else if(medical.entity === "burn" ){
-               session.send(" ");
+               session.send("Most minor burns will heal on their own, and home treatment is usually all that is needed to relieve your symptoms and " +
+                "promote healing. But if you suspect you may have a more severe injury, use first-aid measures while you arrange for an evaluation " +
+                "by your doctor.");
             }
             //session.send( "Here is what I know about " + medical.entity);
-            next({ response: medical.entity });
+            //next({ response: medical.entity });
         }
         else if(criminal){
             session.send( "Here is what I know about " + criminal.entity);
-            next({ response: criminal.entity });
+            //next({ response: criminal.entity });
         }
-    	else if(environmental)
-    	{
-            session.send( "Here is what I know about " + environmental.entity);
-            next({ response: environmental.entity });
-
-    	}
+        else if(environmental)
+        {
+            if(environmental.entity === "tornado" ){
+                session.send("Continued vigilance and quick response to tornado watches and warnings are critical, since tornadoes can strike virtually" +
+                " anywhere at any time. Most tornadoes are abrupt at onset, short-lived and often obscured by rain or darkness. That's why it's so " +
+                "important to plan ahead. Every individual, family, and business should have a tornado emergency plan for their homes or places of work, " +
+                "and should learn how to protect themselves in cars, open country, and other situations that may arise. The most important step you can take " +
+                "to prepare for a tornado is to have a shelter plan in place. Where will you go when a tornado warning has been issued for your county or city? " +
+                "Is it a basement or a storm cellar? Is there an interior room on the ground floor that you can use as a storm shelter? Have a plan, " +
+                "and make sure everyone in your family or workplace knows it.");
+            }
+            else if(environmental.entity === "hurricane" ){
+                session.send("To stay safe in a home during a hurricane, stay inside and away from windows, skylights and glass doors. Find a safe area in the " +
+                    "home (an interior room, a closet or bathroom on the lower level). If flooding threatens a home, turn off electricity at the main breaker." +
+                    "If a home loses power, turn off major appliances such as the air conditioner and water heater to reduce damage. Do not use electrical appliances, " +
+                    "including your computer. Do not go outside. If the eye of the storm passes over your area, there will be a short period of calm, but at the other " +
+                    "side of the eye, the wind speed rapidly increases to hurricane force and will come from the opposite direction. Also, do not go outside to see " +
+                    "what the wind feels like. It is too easy to be hit by flying debris. Beware of lightning. Stay away from electrical equipment. Don't use the " +
+                    "phone or take a bath/shower during the storm.");
+            }
+            else if(environmental.entity === "earthquake" ){
+                session.send("There are several common beliefs as to earthquake safety. Many people think having bottled water on hand is a good idea. " + 
+                    "That’s true, as long as you have enough. Many are certain that standing in a doorway during the shaking is a good idea. That’s false," +
+                     "unless you live in an unreinforced adode structure; otherwise, you're more likely to be hurt by the door swinging wildly in a doorway" + 
+                     "or trampled by people trying to hurry outside if you’re in a public place.");
+            }
+            else if(environment.entity === "fire" ){
+               session.send("The average response time for the fire service is 14 minutes. Therefore, you are on your own and must function as " +
+                "your own fire fighter for the first several minutes. 'Rescue, alarm, extinguish' is a simple rule to help you remember what to do " + 
+                "in the event of a fire. You will have to determine the order in which you address these points, depending on your assessment of " +
+                "the situation.");
+            }
+            //session.send( "Here is what I know about " + environmental.entity);
+            //next({ response: environmental.entity });
+        }
         else{
             session.send("Here is what I know about nothing.");
-            next({ response: organization.entity });
+            //next({ response: organization.entity });
         }
     },
     function (session, results) {
          if (results.response) {
             if(results.response == "police")
             {
-
             }
             session.send("Ok... Added the '%s' task.", results.response);
         }
-    }*/
+    }
 ]);
 
 
