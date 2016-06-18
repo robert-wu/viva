@@ -32,22 +32,83 @@ bot.add('/', dialog);
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
-dialog.on('/firstRun',  [
+dialog.on('/Greetings',  [
     function (session) {
         session.send("Hello, I'm Viva.");
     },
     function (session) {
         session.send("I’m here to help you in the case of an emergency.");
     },
+    
+    
+]);
+
+dialog.on('/SetupUserProfile', [
     function (session) {
-        session.send(session, "What's your name?");
+        session.send(session, "Let’s set up your profile.");
+    },
+    function (session) {
+        session.send(session, " In the case of an emergency, we can communicate your personal information to emergency service operators.");
+    },
+    function (session) {
+        session.send(session, "What is your full name?");
     },
     function (session, results) {
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
-    
-]);
+    function (session) {
+        session.send(session, "What is your sex?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "What is your phone number?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "What is the phone number of your primary emergency contact?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "What is your date of birth?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "Do you have any existing medical conditions?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "Are you allergic to any medication?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+    function (session) {
+        session.send(session, "Who is your health provider?");
+    },
+     function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+
+
+    ]);
 
 dialog.on('GetInformation', [
     function (session, args) {
