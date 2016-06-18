@@ -45,11 +45,11 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        builder.Prompts.choice(session, "Hi! I'm Viva. Is there an emergency?", "yes|no");
+        builder.Prompts.choice(session, "Hi! I'm Viva. Is there an emergency?", "Yes|No");
         //next();
     },
     function (session, results) {
-        if(results.response.entity == "yes"){
+        if(results.response.entity == "Yes"){
                         client.sendMessage({
 
                 to:'+16303019617', // Any number Twilio can deliver to
@@ -58,7 +58,7 @@ dialog.on('Greeting',  [
 
             }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
-                session.send("Your contact information has been received, you will receive a phone call soon");
+                session.send("Your health and contact information has been sent to a local dispatcher. You will receive a phone call shortly from emergency services.");
                 if (!err) { // "err" is an error received during the request, if any
 
                     // "responseData" is a JavaScript object containing data received from Twilio.
