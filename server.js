@@ -9,11 +9,6 @@ var botConnectorOptions = {
 
 // Create bot
 var bot = new builder.BotConnectorBot(botConnectorOptions);
-bot.add('/', function (session) {
-    
-    //respond with user's message
-    session.send("You said " + session.message.text);
-});
 
 // Setup Restify Server
 var server = restify.createServer();
