@@ -34,13 +34,12 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
 dialog.on('Greeting',  [
-    function (session, args, next) {
-        session.send(session, "Hi, I'm Viva.");
-        next();
-    },
-    function (session, results) {
-        session.send("I am here to help you.");
-    }
+    function (session) {
+        session.send("[Hi, I'm Viva.](http://ning.com)");
+    }//,
+    // function (session, results) {
+    //     session.send("I am here to help you.");
+    // }
 ]);
 
 dialog.on('SetupUserProfile', [
