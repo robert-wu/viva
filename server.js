@@ -213,13 +213,13 @@ dialog.on('SetupUserProfile', [
     },
     function (session, results) {
         session.userData.medicationAllergies = results.response;
-        builder.Prompts.text(session, "What is your health provider"); 
+        builder.Prompts.text(session, "Last one! What is your health provider"); 
     },
     function (session, results) {
         session.userData.healthProvider = results.response;
         
         myFirebaseRef.child(session.userData.name).set(session.userData);
-        country= session.userData.country;
+        country = session.userData.country;
         //session.send(country);
         URLBuilder = 'https://restcountries.eu/rest/v1/name/'+ country;
         //3console.log(URLBuilder);
@@ -249,7 +249,8 @@ dialog.on('SetupUserProfile', [
                             out += ", Dispatch: " + obj2.data.dispatch.all[0];
                         }
                         session.userData.numbers = out.substring(2,200);
-                        myFirebaseRef.child(session.userData.name).child('numbers').set(session.userData.numbers);
+                        myFirebaseRef.child(session.userData.name).set(session.userData);
+                        //myFirebaseRef.child(session.userData.name).child('numbers').set(session.userData.numbers);
                         //console.log(obj2);
                     }
                     else if(error2){
@@ -262,7 +263,7 @@ dialog.on('SetupUserProfile', [
             }
         });
 
-        session.send("Thanks for your responses. They have been recorded");
+        //session.send("Thanks for your responses. They have been recorded");
         
     }
 ]);
@@ -297,7 +298,7 @@ dialog.on('ContactOrganization', [
     }
 ]);
 
-bot.add('/', [
+bot.add('hi124', [
     function (session) {
         //session.send("You can pass a custom message to Prompts.choice() that will present the user with a carousel of cards to select from. Each card can even support multiple actions.");
         
