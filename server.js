@@ -299,7 +299,7 @@ dialog.on('ContactOrganization', [
 
 bot.add('/', [
     function (session) {
-        session.send("You can pass a custom message to Prompts.choice() that will present the user with a carousel of cards to select from. Each card can even support multiple actions.");
+        //session.send("You can pass a custom message to Prompts.choice() that will present the user with a carousel of cards to select from. Each card can even support multiple actions.");
         
         // Ask the user to select an item from a carousel.
         var msg = new builder.Message();
