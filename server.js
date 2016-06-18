@@ -10,6 +10,7 @@ myFirebaseRef.on('value', function(snapshot) {
     curData=snapshot.val();
 });
 
+var client = require('twilio')('AC59a2a7d898b46d6b39fa102380816d40', '7f53052dbd2df38c182d0e01331c6f7f');
 // Get secrets from server environment
 var botConnectorOptions = { 
     appId: process.env.BOTFRAMEWORK_APPID, 
@@ -44,8 +45,37 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        session.send("Hi, I'm Viva.\n\n\n\nI’m here to help you in the case of an emergency.");
+        builder.Prompts.choice(session, "Hi! I'm Viva. Is there an emergency?", "yes|no");
         //next();
+    },
+    function (session, results) {
+        if(results.response.entity == "yes"){
+                        client.sendMessage({
+
+                to:'+16303019617', // Any number Twilio can deliver to
+                from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
+                body: '"6303019617"' // body of the SMS message
+
+            }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+                if (!err) { // "err" is an error received during the request, if any
+
+                    // "responseData" is a JavaScript object containing data received from Twilio.
+                    // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+                    // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+                    console.log(responseData.from); // outputs "+14506667788"
+                    console.log(responseData.body); // outputs "word to your mother."
+
+                }
+                else {
+                    console.log(err);
+                }
+            });
+        }
+        else{
+            builder.Prompts.text(session, "Good! Do you need anything else?");
+        }
     }
     //,
     // function (session, results) {
@@ -297,6 +327,8 @@ dialog.on('ContactOrganization', [
 
     }
 ]);
+
+
 
 
 
