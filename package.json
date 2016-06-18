@@ -1,22 +1,27 @@
 {
-  "name": "viva",
+  "name": "echobot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A sample bot for getting started with Bot Framework",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ziranw/viva.git"
+    "url": "git+https://github.com/fuselabs/echobot.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "botframework"
+  ],
+  "author": "Fuse Labs",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ziranw/viva/issues"
+    "url": "https://github.com/fuselabs/echobot/issues"
   },
-  "homepage": "https://github.com/ziranw/viva#readme",
+  "homepage": "https://github.com/fuselabs/echobot#readme",
   "dependencies": {
+    "botbuilder": "^0.6.5",
+    "restify": "^4.0.4"
     "botbuilder": "^1.0.1",
     "request": "^2.72.0",
     "restify": "^4.1.1"
