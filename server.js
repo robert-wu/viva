@@ -35,7 +35,7 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 dialog.on('Greeting',  [
     function (session) {
-        session.send("Hi, I'm Viva.\n\n\n\n I’m here to help you in the case of an emergency.");
+        session.sendMessage("Hi, I'm Viva.\n\n\n\n I’m here to help you in the case of an emergency.");
         //next();
     }
     //,
@@ -123,9 +123,10 @@ dialog.on('GetInformation', [
            // response: organization.entity;
             
             if(organization.entity === "police" ){
-                session.send( "Here is what I know about " + organization.entity);
+                session.sendMessage( "Here is what I know about " + organization.entity);
+                session.sendMessage( "this is" + organization.entity);
                 console.log("police printout");
-                session.replaceDialog('/police');
+                session.beginDialog('/police');
             }
             if(organization.entity === "fire station" ){
                 session.beginDialog('fireStation');
