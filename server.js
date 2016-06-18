@@ -140,7 +140,8 @@ dialog.on('GetInformation', [
         }
         else if(medical){
             if(medical.entity === "heart attack" ){
-                session.replaceDialog('HeartAttack');
+                console.log("heart attack");
+                session.startDialog('HeartAttack');
             }
             else if(medical.entity === "broken bone" ){
                 session.send("It is hard to tell a dislocated joint from a broken bone. However, both are emergency situations, " + 
