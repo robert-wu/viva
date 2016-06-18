@@ -38,6 +38,7 @@ dialog.onBegin(function (session, args, next) {
         session.userData.firstRun = true;
         session.beginDialog('/firstRun');
     } else {
+        session.beginDialog('/firstRun');
         next();
     }
 });
