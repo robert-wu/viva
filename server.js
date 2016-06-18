@@ -36,11 +36,8 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 dialog.on('Greeting',  [
     function (session) {
         session.send("Hello, I'm Viva.");
-    },
-    function (session) {
         session.send("I’m here to help you in the case of an emergency.");
-    },
-    
+    } 
 ]);
 
 dialog.on('SetupUserProfile', [
@@ -112,7 +109,7 @@ dialog.on('SetupUserProfile', [
 
 dialog.on('GetInformation', [
     function (session, args) {
-        session.send("getting information for ya " );
+        //session.send("getting information for ya " );
     	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
     	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
@@ -122,13 +119,13 @@ dialog.on('GetInformation', [
            // response: organization.entity;
             session.send( "Here is what I know about " + organization.entity);
         }
-        if(medical){
+        else if(medical){
             session.send( "Here is what I know about " + medical.entity);
         }
-        if(criminal){
+        else if(criminal){
             session.send( "Here is what I know about " + criminal.entity);
         }
-    	if(environmental)
+    	else if(environmental)
     	{
             session.send( "Here is what I know about " + environmental.entity);
     	}
