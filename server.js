@@ -37,7 +37,7 @@ dialog.on('Greeting',  [
     function (session, args) {
         builder.Prompts.text(session, "Hi, I'm Viva.");
     },
-    function (session, results) {
+    function (session) {
         session.send("I am here to help you.");
     }
 ]);
