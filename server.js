@@ -32,14 +32,13 @@ bot.add('/', dialog);
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
-dialog.on('/Greetings',  [
+dialog.on('/Greeting',  [
     function (session) {
         session.send("Hello, I'm Viva.");
     },
     function (session) {
         session.send("I’m here to help you in the case of an emergency.");
     },
-    
     
 ]);
 
