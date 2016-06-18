@@ -124,6 +124,7 @@ dialog.on('GetInformation', [
             
             if(organization.entity === "police" ){
                 session.send( "Here is what I know about " + organization.entity);
+                console.log("police printout");
                 session.replaceDialog('/police');
             }
             if(organization.entity === "fire station" ){
