@@ -121,8 +121,9 @@ dialog.on('GetInformation', [
 
         if(organization){
            // response: organization.entity;
-            session.send( "Here is what I know about " + organization.entity);
+            
             if(organization.entity === "police" ){
+                session.send( "Here is what I know about " + organization.entity);
                 session.beginDialog('police');
             }
             if(organization.entity === "fire station" ){
