@@ -37,7 +37,7 @@ server.listen(process.env.port || 3978, function () {
 
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
-bot.add('/', dialog);
+//bot.add('/', dialog);
 
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
@@ -297,36 +297,18 @@ dialog.on('ContactOrganization', [
     }
 ]);
 
-bot.add('/cards',[
+bot.add('/', [
     function (session) {
-        var buttons = 
-        {
-        "type": "Message",
-        "attachments": [
-            {
-               "text": "Pick one:",
-                "actions": [
-                    {
-                        "title": "Willy's Cheeseburger",
-                        "message": "CB"
-                    },
-                    {
-                        "title": "Curley Fries",
-                        "message": "F"
-                    },
-                    {
-                        "title": "Chocolate Shake",
-                        "message": "S"
-                    }
-                ]
-            }
-        ]
+        builder.Prompts.choice(session, "Which region would you like sales for?", salesData); 
+    },
+    function (session, results) {
+        if (results.response) {
+            var region = salesData[results.response.entity];
+            session.send("We sold %(units)d units for a total of %(total)s.", region); 
+        } else {
+            session.send("ok");
         }
-
-        session.send(buttons);
     }
-
-    ]);
-
+]);
 
 
