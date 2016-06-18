@@ -91,7 +91,6 @@ dialog.on('Greeting',  [
             //console.log(body) // Show the HTML for the Google homepage.
                 var json = JSON.parse(body);
                 var dispatchNumber = json.data.dispatch.all[0];
-                console.log(phoneNumber);
                 if(dispatchNumber == "") {
                     dispatchNumber = json.data.police.all[0];
                 }
@@ -104,7 +103,7 @@ dialog.on('Greeting',  [
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
-                    session.send("Your health and contact information has been sent to a local dispatcher at " + phoneNumber + ". You will receive a phone call shortly from emergency services.");
+                    session.send("Your health and contact information has been sent to a local dispatcher at " + dispatchNumber + ". You will receive a phone call shortly from emergency services.");
                     if (!err) { // "err" is an error received during the request, if any
 
                         // "responseData" is a JavaScript object containing data received from Twilio.
