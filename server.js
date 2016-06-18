@@ -32,17 +32,6 @@ bot.add('/', dialog);
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
-dialog.onBegin(function (session, args, next) {
-    if (!session.userData.firstRun) {
-        // Send the user through the first run experience
-        session.userData.firstRun = true;
-        session.beginDialog('/firstRun');
-    } else {
-        session.beginDialog('/firstRun');
-        next();
-    }
-});
-
 dialog.on('/firstRun',  [
     function (session) {
         session.send("Hello, I'm Viva.");
@@ -57,7 +46,6 @@ dialog.on('/firstRun',  [
         session.userData.name = results.response;
         builder.Prompts.number(session, "Hi " + results.response); 
     },
-
     
 ]);
 
