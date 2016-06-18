@@ -65,6 +65,7 @@ dialog.on('Greeting',  [
         }
         else{
             session.send("Good! Do you need anything else?");
+            session.endDialog();
         }
     },
     function(session, results) {
