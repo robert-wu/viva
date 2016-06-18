@@ -112,10 +112,10 @@ dialog.on('/SetupUserProfile', [
 
 dialog.on('GetInformation', [
     function (session, args) {
-    	var organization = builder.EntityRecognizer.findEntity(args.entities, 'Organization');
-		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Medical');
-    	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Criminal');
-    	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Disaster::Environmental');
+    	var organization = builder.EntityRecognizer.findEntity(args.entities[0].type, 'Organization');
+		var medical = builder.EntityRecognizer.findEntity(args.entities[0].type, 'Disaster::Medical');
+    	var criminal = builder.EntityRecognizer.findEntity(args.entities[0].type, 'Disaster::Criminal');
+    	var environmental = builder.EntityRecognizer.findEntity(args.entities[0].type, 'Disaster::Environmental');
 
         if(organization){
            // response: organization.entity;
