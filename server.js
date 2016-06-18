@@ -299,11 +299,57 @@ dialog.on('ContactOrganization', [
 
 bot.add('/', [
     function (session) {
-        builder.Prompts.choice(session, "Which color?", "red|green|blue");
+        session.send("You can pass a custom message to Prompts.choice() that will present the user with a carousel of cards to select from. Each card can even support multiple actions.");
+        
+        // Ask the user to select an item from a carousel.
+        var msg = new builder.Message();
+        msg.addAttachment({
+            title: "Classic White T-Shirt",
+            text: "Soft white cotton t-shirt is back in style",
+            thumbnailUrl: "http://petersapparel.parseapp.com/img/item100-thumb.png",
+            actions: [
+                { title: "View Item", url: "https://petersapparel.parseapp.com/view_item?item_id=100" },
+                { title: "Buy Item", message: "buy:100" },
+                { title: "Bookmark Item", message: "bookmark:100" }
+            ]
+        });
+        msg.addAttachment({
+            title: "Classic Grey T-Shirt",
+            text: "Soft gray cotton t-shirt is back in style",
+            thumbnailUrl: "http://petersapparel.parseapp.com/img/item101-thumb.png",
+            actions: [
+                { title: "View Item", url: "https://petersapparel.parseapp.com/view_item?item_id=101" },
+                { title: "Buy Item", message: "buy:101" },
+                { title: "Bookmark Item", message: "bookmark:101" }
+            ]
+        });
+        builder.Prompts.choice(session, msg, "buy:100|bookmark:100|buy:101|bookmark:101");
     },
     function (session, results) {
-        
-    }
+        if (results.response) {
+            var action, item;
+            var kvPair = results.response.entity.split(':');
+            switch (kvPair[0]) {
+                case 'buy':
+                    action = 'purchased';
+                    break;
+                case 'bookmark':
+                    action = 'bookmarked';
+                    break;
+            }
+            switch (kvPair[1]) {
+                case '100':
+                    item = "Classic White T-Shirt";
+                    break;
+                case '101':
+                    item = "Classic Grey T-Shirt";
+                    break;
+            }
+            session.endDialog('You %s the "%s"', action, item);
+        } else {
+            session.endDialog("You canceled.");
+        }
+    }    
 ]);
 
 
