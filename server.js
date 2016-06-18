@@ -29,6 +29,7 @@ server.listen(process.env.port || 3978, function () {
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
 bot.add('/', dialog);
+
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
@@ -118,18 +119,21 @@ dialog.on('GetInformation', [
     	if(!organization){
         	builder.Prompts.text(session, "What would you like me to say?");
     	}
-    	else if(!medical){
+    	if(!medical){
+        	builder.Prompts.text(session, "What would you like to call medical?");
+    	}
+        else{
+            session.send(session, "medical condition is heart attack");
+        }
+    	if(!criminal){
         	builder.Prompts.text(session, "What would you like me to say?");
     	}
-    	else if(!criminal){
-        	builder.Prompts.text(session, "What would you like me to say?");
-    	}
-    	else if(!environmental){
+    	if(!environmental){
         	builder.Prompts.text(session, "What would you like me to say?");
     	}
     	else
     	{
-
+            builder.Prompts.text(session, "What would you like me to say?");
     	}
     },
     function (session, results) {
