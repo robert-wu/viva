@@ -101,7 +101,7 @@ dialog.on('Greeting',  [
 
                     to:'+16303019617', // Any number Twilio can deliver to
                     from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-                    body: '\n' + 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['medicalConditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number']  + '\n' + "Allergies: " + currData['medicationAllergies'] // body of the SMS message
+                    body: '\n' + 'Name: ' + curData[lastUsedName]['name'] + '\n' + 'Current City: ' + city + '\n' + "Sex: " + curData[lastUsedName]['sex'] + '\n' + "DOB: " + curData[lastUsedName]['DoB'] + '\n' + "Medical Conditions: " + curData[lastUsedName]['medicalConditions'] + '\n' + "Local Number: " + curData[lastUsedName]['number']  + '\n' + "Allergies: " + curData['medicationAllergies'] // body of the SMS message
 
                 }, function(err, responseData) { //this function is executed when a response is received from Twilio
 
