@@ -116,33 +116,24 @@ dialog.on('GetInformation', [
 		var medical = builder.EntityRecognizer.findEntity(args.entities, 'Medical');
     	var criminal = builder.EntityRecognizer.findEntity(args.entities, 'Criminal');
     	var environmental = builder.EntityRecognizer.findEntity(args.entities, 'Environmental');
-    	if(!organization){
-        	builder.Prompts.text(session, "What organization would you like to know about?");
-    	}
-        else{
+    	
+        if(organization){
            // response: organization.entity;
             session.send(session, "Here is what I know about " + organization.entity);
         }
-    	if(!medical){
-            builder.Prompts.text(session, "What medical concepts would you like to know about?");
-    	}
-        else{
-
+        if(medical){
             session.send(session, "Here is what I know about " + medical.entity);
         }
-    	if(!criminal){
-        	builder.Prompts.text(session, "What kind of crimes would you like to know about?");
-    	}
-        else{
+        if(criminal){
             session.send(session, "Here is what I know about " + criminal.entity);
         }
-    	if(!environmental){
-        	builder.Prompts.text(session, "What environmental issues would you like to know about?");
-    	}
-    	else
+    	if(environmental){
     	{
-            builder.Prompts.text(session, "Here is what I know about " + environmental.entity);
+            session.send(session, "Here is what I know about " + environmental.entity);
     	}
+        else{
+            session.send(session, "Here is what I know about nothing.");
+        }
     },
     function (session, results) {
         
