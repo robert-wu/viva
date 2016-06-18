@@ -34,10 +34,12 @@ dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
 
 dialog.on('Greeting',  [
-    function (session) {
-        session.send("Hello, I'm Viva.");
-        session.send("I’m here to help you in the case of an emergency.");
-    } 
+    function (session, args) {
+        builder.Prompts.text(session, "Hi, I'm Viva.");
+    },
+    function (session, results) {
+        session.send("I am here to help you.");
+    }
 ]);
 
 dialog.on('SetupUserProfile', [
