@@ -217,7 +217,7 @@ dialog.on('SetupUserProfile', [
     },
     function (session, results) {
         session.userData.healthProvider = results.response;
-        session.send("Thanks for your responses. They have been recorded");
+        
         myFirebaseRef.child(session.userData.name).set(session.userData);
         country= session.userData.country;
         //session.send(country);
@@ -261,6 +261,8 @@ dialog.on('SetupUserProfile', [
                 console.log(error);
             }
         });
+
+        session.send("Thanks for your responses. They have been recorded");
         
     }
 ]);
@@ -321,7 +323,7 @@ bot.add('/cards',[
         ]
         }
 
-        session.sendMessage(buttons);
+        session.send(buttons);
     }
 
     ]);
