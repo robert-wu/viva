@@ -437,9 +437,9 @@ dialog.on('SetupUserProfile', [
             session.endDialog();
         }
         session.userData.name = results.response;
-        if(curData[results.response] !== undefined){
+        /*if(curData[results.response] !== undefined){
             sender.send('You are already registered');
-        }
+        }*/
         else{
             builder.Prompts.text(session, "Hi " + results.response + "\n\n\n\nWhat's your sex?"); 
         }
