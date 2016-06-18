@@ -50,40 +50,37 @@ dialog.on('Greeting',  [
     },
     function (session, results) {
         if(results.response.entity == "Yes"){
-            builder.Prompts.text(session,"What city are you in");
-                
+            builder.Prompts.text(session,"What city are you in");                
         }
-        function(session, results) {
-
-            
-            client.sendMessage({
-
-                to:'+16303019617', // Any number Twilio can deliver to
-                from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
-                body: '"6303019617"' // body of the SMS message
-
-            }, function(err, responseData) { //this function is executed when a response is received from Twilio
-
-                session.send("Your health and contact information has been sent to a local dispatcher. You will receive a phone call shortly from emergency services.");
-                if (!err) { // "err" is an error received during the request, if any
-
-                    // "responseData" is a JavaScript object containing data received from Twilio.
-                    // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
-                    // http://www.twilio.com/docs/api/rest/sending-sms#example-1
-
-                    console.log(responseData.from); // outputs "+14506667788"
-                    console.log(responseData.body); // outputs "word to your mother."
-
-                }
-                else {
-                    console.log(err);
-                }
-            });
-        }
-
         else{
             session.send("Good! Do you need anything else?");
         }
+    },
+    function(session, results) {
+        var city = results.response;
+        client.sendMessage({
+
+            to:'+16303019617', // Any number Twilio can deliver to
+            from: '+12132701371 ', // A number you bought from Twilio and can use for outbound communication
+            body: '"6303019617"' + city // body of the SMS message
+
+        }, function(err, responseData) { //this function is executed when a response is received from Twilio
+
+            session.send("Your health and contact information has been sent to a local dispatcher. You will receive a phone call shortly from emergency services.");
+            if (!err) { // "err" is an error received during the request, if any
+
+                // "responseData" is a JavaScript object containing data received from Twilio.
+                // A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+                // http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+                console.log(responseData.from); // outputs "+14506667788"
+                console.log(responseData.body); // outputs "word to your mother."
+
+            }
+            else {
+                console.log(err);
+            }
+        });
     }
     //,
     // function (session, results) {
