@@ -37,7 +37,7 @@ server.listen(process.env.port || 3978, function () {
 
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
-//bot.add('/', dialog);
+bot.add('/', dialog);
 
 dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
 
@@ -298,59 +298,6 @@ dialog.on('ContactOrganization', [
     }
 ]);
 
-bot.add('hi124', [
-    function (session) {
-        //session.send("You can pass a custom message to Prompts.choice() that will present the user with a carousel of cards to select from. Each card can even support multiple actions.");
-        
-        // Ask the user to select an item from a carousel.
-        var msg = new builder.Message();
-        msg.addAttachment({
-            title: "Classic White T-Shirt",
-            text: "Soft white cotton t-shirt is back in style",
-            thumbnailUrl: "http://petersapparel.parseapp.com/img/item100-thumb.png",
-            actions: [
-                { title: "View Item", url: "https://petersapparel.parseapp.com/view_item?item_id=100" },
-                { title: "Buy Item", message: "buy:100" },
-                { title: "Bookmark Item", message: "bookmark:100" }
-            ]
-        });
-        msg.addAttachment({
-            title: "Classic Grey T-Shirt",
-            text: "Soft gray cotton t-shirt is back in style",
-            thumbnailUrl: "http://petersapparel.parseapp.com/img/item101-thumb.png",
-            actions: [
-                { title: "View Item", url: "https://petersapparel.parseapp.com/view_item?item_id=101" },
-                { title: "Buy Item", message: "buy:101" },
-                { title: "Bookmark Item", message: "bookmark:101" }
-            ]
-        });
-        builder.Prompts.choice(session, msg, "buy:100|bookmark:100|buy:101|bookmark:101");
-    },
-    function (session, results) {
-        if (results.response) {
-            var action, item;
-            var kvPair = results.response.entity.split(':');
-            switch (kvPair[0]) {
-                case 'buy':
-                    action = 'purchased';
-                    break;
-                case 'bookmark':
-                    action = 'bookmarked';
-                    break;
-            }
-            switch (kvPair[1]) {
-                case '100':
-                    item = "Classic White T-Shirt";
-                    break;
-                case '101':
-                    item = "Classic Grey T-Shirt";
-                    break;
-            }
-            session.endDialog('You %s the "%s"', action, item);
-        } else {
-            session.endDialog("You canceled.");
-        }
-    }    
-]);
+
 
 
