@@ -29,19 +29,36 @@ server.listen(process.env.port || 3978, function () {
 
 var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=dbc0fee8-f1bb-4932-a453-98ca65ba1b2c&subscription-key=eea3e95656e74c91b1d45b283cc6a91c');
 bot.add('/', dialog);
+dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+
 
 dialog.onBegin(function (session, args, next) {
     if (!session.userData.firstRun) {
         // Send the user through the first run experience
         session.userData.firstRun = true;
-        //session.beginDialog('/profile');
-        session.send('Hello %s!', session.userData.name);
+        session.beginDialog('/firstRun');
     } else {
         next();
     }
 });
 
-dialog.onDefault(builder.DialogAction.send("I'm sorry. I didn't understand."));
+dialog.add('/firstRun',  [
+    function (session) {
+        session.send("Hello, I'm Viva.");
+    },
+    function (session) {
+        session.send("I’m here to help you in the case of an emergency.");
+    },
+    function (session) {
+        session.send(session, "What's your name?");
+    },
+    function (session, results) {
+        session.userData.name = results.response;
+        builder.Prompts.number(session, "Hi " + results.response); 
+    },
+
+    
+]);
 
 dialog.on('GetInformation', [
     function (session, args) {
