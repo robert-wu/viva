@@ -84,7 +84,7 @@ dialog.on('Greeting',  [
     // }
 ]);
 
-/*bot.add('/', [
+bot.add('/country', [
     function (session) {
         builder.Prompts.text(session, "Hello... Give me a country?");
     },
@@ -109,7 +109,7 @@ dialog.on('Greeting',  [
             }
         }
     }
-]);*/
+]);
 
 dialog.on('GetInformation', [
      /*function (session) {
